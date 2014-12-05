@@ -29,7 +29,6 @@ dht DHT;
 
 //Sonnar library
 #include <NewPing.h>
-
 NewPing sonar(SONAR_PIN,SONAR_PIN,200);
 
 /**************************************************************************/
