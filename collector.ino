@@ -1,34 +1,37 @@
-#include <NewPing.h>
-
-#include <config.h>
-#include <utilsawesome.h>
 
 /*
-Freakduino Chibi-9000
-
 Collects data from different sensors and sends it to 
 the aggregator as defined in "config.h"
 */
 
 #include <chibi.h>
-#include "DHT.h"
 
-/* Saboten includes
+// satoyama-chibi-lib includes
+// Defines pin numbers for sensors and also a simple format to send
+// information to the satoyama edge router
+#include <config.h>
+#include <utilsawesome.h>
+
+
+/* Saboten includes */
 #include <avr/sleep.h>
 #include <avr/power.h>
 #include <avr/wdt.h>
 #include <Wire.h>
 #include <SPI.h>
 #include <SdFat.h>
-#include <pcf2127.h> */
+#include <pcf2127.h>
 
-
-#include <NewPing.h>
-
+//Temperature and humidity library
+#include "DHT.h"
 #define DHTTYPE DHT11   // Type of DHT sensor, in our case we are using DHT11
 #define DHT11_PIN A0    // Pin where the DHT11 is connected
 
 dht DHT;
+
+//Sonnar library
+#include <NewPing.h>
+
 NewPing sonar(SONAR_PIN,SONAR_PIN,200);
 
 /**************************************************************************/
@@ -94,7 +97,7 @@ void loop()
     add_to_tx_buf((char*)tx_buf, &hum);
   }
 
-  //Send data stored on "tx_buf" to collector
+  //Send data stored on "tx_buf" to aggregator (Satoyama edge router)
   chibiTx(AGGREGATOR_SHORT_ADDRESS, tx_buf, TX_LENGTH);
 
   // Debug print

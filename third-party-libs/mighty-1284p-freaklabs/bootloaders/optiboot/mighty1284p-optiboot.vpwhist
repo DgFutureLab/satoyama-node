@@ -1,0 +1,32 @@
+[Global]
+CurrentProject=mighty1284p-optiboot.vpj
+[ProjectDates]
+mighty1284p-optiboot.vpj=20130215010044187
+[ActiveConfig]
+mighty1284p-optiboot.vpj=Debug
+[TreeExpansion2]
+- mighty1284p-optiboot.vpj
+  - Source Files
+  + Header Files
+  + Resource Files
+  + Bitmaps
+  - Other Files
+scroll:0
+[State]
+SCREEN: 1920 1080 199 3 1220 1054 0 0 N 0 0 0 0 966 663 0
+CWD: ..\optiboot
+FILEHIST: 9
+..\..\..\..\..\..\arduino-1.0.1\hardware\arduino\bootloaders\optiboot\README.TXT
+..\..\..\arduino\boards.txt
+..\..\variants\standard\pins_arduino.h
+optiboot.c
+optiboot_atmega1284p.hex
+optiboot_atmega1284p_8MHz.hex
+Makefile
+..\..\variants\freaklabs\pins_arduino.h
+..\..\boards.txt
+DEBUG: 0 0 0 0 3 0
+printf
+strcpy
+std::*
+TBCLASS: 0 0
