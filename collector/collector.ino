@@ -12,8 +12,7 @@ the aggregator as defined in "config.h"
 #include <config.h>
 #include <utilsawesome.h>
 
-
-/* Saboten includes */
+// Saboten includes
 #include <avr/sleep.h>
 #include <avr/power.h>
 #include <avr/wdt.h>
@@ -26,7 +25,6 @@ the aggregator as defined in "config.h"
 #include "DHT.h"
 #define DHTTYPE DHT11   // Type of DHT sensor, in our case we are using DHT11
 #define DHT11_PIN A0    // Pin where the DHT11 is connected
-
 dht DHT;
 
 //Sonnar library
@@ -53,35 +51,9 @@ void setup()
 /**************************************************************************/
 void loop()
 {
-  // Read latest temperature data from DHT11
-  int chk = DHT.read11(DHT11_PIN);
-  switch (chk)
-  {
-    case DHTLIB_OK:  
-		Serial.print("OK,\t"); 
-		break;
-    case DHTLIB_ERROR_CHECKSUM: 
-		Serial.print("Checksum error,\t"); 
-		break;
-    case DHTLIB_ERROR_TIMEOUT: 
-		Serial.print("Time out error,\t"); 
-		break;
-    default: 
-		Serial.print("Unknown error,\t"); 
-		break;
-  }
-
   byte tx_buf[TX_LENGTH];
   memset(tx_buf, 0, TX_LENGTH);
   long duration, inches, cm;
-  
-  // Read sonar distance
-  float distance = sonar.ping() / US_ROUNDTRIP_CM; 
-  
-  if (distance > 0) {
-    Reading dist = {"distance", distance, millis()};
-    add_to_tx_buf((char*)tx_buf, &dist);
-  }
 
   // Read temperature
   float temperature = DHT.temperature;  
@@ -97,13 +69,21 @@ void loop()
     add_to_tx_buf((char*)tx_buf, &hum);
   }
 
+  // Read sonar distance
+  float distance = sonar.ping() / US_ROUNDTRIP_CM; 
+  
+  if (distance > 0) {
+    Reading dist = {"distance", distance, millis()};
+    add_to_tx_buf((char*)tx_buf, &dist);
+  }
+
   //Send data stored on "tx_buf" to aggregator (Satoyama edge router)
   chibiTx(AGGREGATOR_SHORT_ADDRESS, tx_buf, TX_LENGTH);
 
   // Debug print
   Serial.println((char*) tx_buf);
 
-  free(tx_buf);
   //Wait
   delay(30*1000);
+  free(tx_buf);
 }
