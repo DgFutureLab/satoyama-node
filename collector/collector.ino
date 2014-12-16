@@ -42,6 +42,9 @@ void setup()
   // Initialize the chibi wireless stack
   chibiInit();
 
+  chibiCmdAdd("getsaddr", cmdGetShortAddr);  // set the short address of the node
+  chibiCmdAdd("setsaddr", cmdSetShortAddr);  // get the short address of the node
+  
   Serial.println("Type,\tstatus,\tHumidity (%),\tTemperature (C)");
 }
 
@@ -50,6 +53,7 @@ void setup()
 /**************************************************************************/
 void loop()
 {
+  chibiCmdPoll();
   byte tx_buf[TX_LENGTH];
   memset(tx_buf, 0, TX_LENGTH);
   long duration, inches, cm;
@@ -86,3 +90,64 @@ void loop()
   delay(30*1000);
   free(tx_buf);
 }
+
+
+
+
+/**************************************************************************/
+// USER FUNCTIONS
+/**************************************************************************/
+
+/**************************************************************************/
+/*!
+    Get short address of device from EEPROM
+    Usage: getsaddr
+*/
+/**************************************************************************/
+void cmdGetShortAddr(int arg_cnt, char **args)
+{
+  int val;
+  
+  val = chibiGetShortAddr();
+  Serial.print("Short Address: "); Serial.println(val, HEX);
+}
+
+/**************************************************************************/
+/*!
+    Write short address of device to EEPROM
+    Usage: setsaddr <addr>
+*/
+/**************************************************************************/
+void cmdSetShortAddr(int arg_cnt, char **args)
+{
+  int val;
+  
+  val = chibiCmdStr2Num(args[1], 16);
+  chibiSetShortAddr(val);
+}
+
+
+/**************************************************************************/
+/*!
+    Concatenate multiple strings from the command line starting from the
+    given index into one long string separated by spaces.
+*/
+/**************************************************************************/
+int strCat(char *buf, unsigned char index, char arg_cnt, char **args)
+{
+    uint8_t i, len;
+    char *data_ptr;
+
+    data_ptr = buf;
+    for (i=0; i<arg_cnt - index; i++)
+    {
+        len = strlen(args[i+index]);
+        strcpy((char *)data_ptr, (char *)args[i+index]);
+        data_ptr += len;
+        *data_ptr++ = ' ';
+    }
+    *data_ptr++ = '\0';
+
+    return data_ptr - buf;
+}
+
