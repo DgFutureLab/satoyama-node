@@ -1,0 +1,3 @@
+[submodule "satoyama-libs"]
+	path = satoyama-libs
+	url = https://github.com/DgFutureLab/satoyama-libs.git
