@@ -52,5 +52,9 @@ Check that the FTDI Breakout board switch is on 5V
 3. For OSX users, download the FTDI drivers from http://www.ftdichip.com/Drivers/VCP.htm
 
 
-4. set the short address of this collector node by hand using test-saboten/test_saboten.ino
-5. load collector/collector.ino into your Saboten board. (Include all the necessary libs from third-party-libs folder)
+4. Open test_saboten/test_saboten.ino
+5. Upload it to the board
+6. Open Arduino IDE's Serial Monitor
+7. Set the communication to Carriage return and 57600 baud
+8. Set the short address of this collector node by hand using *setsaddr <address>
+9. Upload collector/collector.ino into your Saboten board. (Include all the necessary libs from third-party-libs folder)
