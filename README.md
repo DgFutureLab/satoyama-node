@@ -29,6 +29,8 @@ Import the required libraries into your Arduino IDE:
 2. satoyama-libs/SdFat 
 3. satoyama-libs/chibiArduino-master
 4. satoyama-libs/PCF2127
+5. satoyama-libs/Humidity_Temperature_Sensor
+6. satoyama-libs/NewPing
 
 If you use the standard Arduino GUI, go to Sketch → Import Library → Add Library and select each library name folder.
 
@@ -47,7 +49,12 @@ In a Mac environment: Arduino.app/contents/resources/Java/hardware/
 -In case of the Saboten:
 Check that the FTDI Breakout board switch is on 5V
 
+3. For OSX users, download the FTDI drivers from http://www.ftdichip.com/Drivers/VCP.htm
 
 
-4. set the short address of this collector node by hand using test-saboten/test_saboten.ino
-5. load collector/collector.ino into your Saboten board. (Include all the necessary libs from third-party-libs folder)
+4. Open test_saboten/test_saboten.ino
+5. Upload it to the board
+6. Open Arduino IDE's Serial Monitor
+7. Set the communication to Carriage return and 57600 baud
+8. Set the short address of this collector node by hand writing *setsaddr* address  in the serial monitor command prompt
+9. Upload collector/collector.ino into your Saboten board. (Include all the necessary libs from third-party-libs folder)
