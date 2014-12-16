@@ -5,15 +5,14 @@ Satoyama Sensor Network node stack
 
 # Prerequisites
 
--Hardware
+## Hardware
 (List of provided parts: board, sensors, batteries, etc.)
 
 (NOTE: Add mark on saboten board to connect the FTDI Breakout board in the right direction!!)
 
--Software
-Arduino IDE 1.0.6
-(Does not work with Arduino 1.5.8 BETA)
-git
+## Software
+1. Arduino IDE 1.0.6 (Does not work with Arduino 1.5.8 BETA). Get it <a href="http://www.arduino.cc/">here</a>
+2. git
 
 For the Saboten board: 
 Add link to the setup up readme of the saboten (now in tekrice/libs/mighty-1284p-freaklabs)
@@ -29,8 +28,9 @@ for
 # Installation
 Follow these steps to set up a Satoyama sensor node!
 ## Get the code
-1. Download this repository: git clone https://github.com/DgFutureLab/satoyama-node.git
-2. Download all the libraries: git pull && git submodule init && git submodule update && git submodule status
+1. Download this repository: $ git clone https://github.com/DgFutureLab/satoyama-node.git
+2. Go into the new directory: $ cd satoyama-node
+3. Download all the libraries: $ git pull && git submodule init && git submodule update && git submodule status
 
 ## Prepare Arduino libraries
 
