@@ -36,8 +36,8 @@ For the Saboten board:
 
 1. Copy the folder 'mighty-1284p-freaklabs' inside satoyama-libs to a folder called 'hardware' off your sketches directory, e.g. /Users/maniacbug/Source/Arduino/hardware/mighty-1284p
 In a Mac environment: Arduino.app/contents/resources/Java/hardware/
-2.Restart the IDE
-3.Select Tools > Board > Freaklabs Saboten...
+2. Restart the IDE
+3. Select Tools > Board > Freaklabs Saboten...
 
 ## Prepare the hardware
 
