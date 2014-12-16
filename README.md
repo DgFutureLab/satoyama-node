@@ -33,11 +33,11 @@ Import the required libraries into your Arduino IDE:
 If you use the standard Arduino GUI, go to Sketch → Import Library → Add Library and select each library name folder.
 
 For the Saboten board: 
+
 1. Copy the folder 'mighty-1284p-freaklabs' inside satoyama-libs to a folder called 'hardware' off your sketches directory, e.g. /Users/maniacbug/Source/Arduino/hardware/mighty-1284p
 In a Mac environment: Arduino.app/contents/resources/Java/hardware/
-
 2.Restart the IDE
-3.Select Tools > Board > Mighty 1284p 16MHz using Optiboot
+3.Select Tools > Board > Freaklabs Saboten...
 
 ## Prepare the hardware
 
