@@ -13,6 +13,7 @@ Satoyama Sensor Network node stack
 -Software
 Arduino IDE 1.0.6
 (Does not work with Arduino 1.5.8 BETA)
+git
 
 For the Saboten board: 
 Add link to the setup up readme of the saboten (now in tekrice/libs/mighty-1284p-freaklabs)
@@ -26,6 +27,9 @@ for
 
 
 # Installation
+## Get the code
+1. Download this repository: git clone https://github.com/DgFutureLab/satoyama-node.git
+2. Download all the libraries: git pull && git submodule init && git submodule update && git submodule status
 
 1. Attach a sonnar, a temperature sensor and a humidity sensor. The pin numbers are specified in <a href="https://github.com/DgFutureLab/satoyama-node/blob/master/SatoyamaChibiLib/config.h">this file</a> (6 for sonar, 0 for temp/humidity)
 2. Connect the board to the computer
