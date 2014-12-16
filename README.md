@@ -30,6 +30,7 @@ Import the required libraries into your Arduino IDE:
 3. satoyama-libs/chibiArduino-master
 4. satoyama-libs/PCF2127
 5. satoyama-libs/Humidity_Temperature_Sensor
+6. satoyama-libs/NewPing
 
 If you use the standard Arduino GUI, go to Sketch → Import Library → Add Library and select each library name folder.
 
