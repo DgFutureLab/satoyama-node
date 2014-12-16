@@ -49,6 +49,7 @@ In a Mac environment: Arduino.app/contents/resources/Java/hardware/
 -In case of the Saboten:
 Check that the FTDI Breakout board switch is on 5V
 
+3. For OSX users, download the FTDI drivers from http://www.ftdichip.com/Drivers/VCP.htm
 
 
 4. set the short address of this collector node by hand using test-saboten/test_saboten.ino
