@@ -34,11 +34,11 @@ Follow these steps to set up a Satoyama sensor node!
 
 ## Prepare Arduino libraries
 
-1. import the next libraries into your Arduino IDE:  
-   satoyama-libs/SatoyamaChibiLib 
-   satoyama-libs/SdFat 
-   satoyama-libs/chibiArduino-master
-   satoyama-libs/PCF2127
+Import the required libraries into your Arduino IDE:  
+1. satoyama-libs/SatoyamaChibiLib 
+2. satoyama-libs/SdFat 
+3. satoyama-libs/chibiArduino-master
+4. satoyama-libs/PCF2127
 If you use the standard Arduino GUI, go to Sketch → Import Library → Add Library and select each library name folder.
 
 ## Prepare the hardware
