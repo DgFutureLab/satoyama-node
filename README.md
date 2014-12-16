@@ -14,17 +14,6 @@ Satoyama Sensor Network node stack
 1. Arduino IDE 1.0.6 (Does not work with Arduino 1.5.8 BETA). Get it <a href="http://www.arduino.cc/">here</a>
 2. git
 
-For the Saboten board: 
-Add link to the setup up readme of the saboten (now in tekrice/libs/mighty-1284p-freaklabs)
-
-(Inside the readme file change:
-"2. Select Tools > Board > Mighty 1284p 16MHz using Optiboot"
-for
-"2. Select Tools > Board > [Saboten board name (In Mac Original Mighty 1284p 8MHz??)]"
-
-
-
-
 # Installation
 Follow these steps to set up a Satoyama sensor node!
 ## Get the code
@@ -42,6 +31,13 @@ Import the required libraries into your Arduino IDE:
 4. satoyama-libs/PCF2127
 
 If you use the standard Arduino GUI, go to Sketch → Import Library → Add Library and select each library name folder.
+
+For the Saboten board: 
+1. Copy the folder 'mighty-1284p-freaklabs' inside satoyama-libs to a folder called 'hardware' off your sketches directory, e.g. /Users/maniacbug/Source/Arduino/hardware/mighty-1284p
+In a Mac environment: Arduino.app/contents/resources/Java/hardware/
+
+2.Restart the IDE
+3.Select Tools > Board > Mighty 1284p 16MHz using Optiboot
 
 ## Prepare the hardware
 
