@@ -1,1 +1,1 @@
-cp * ~/Documents/Arduino/libraries/FLChibiLib/
+cp * ~/Documents/Arduino/libraries/SatoyamaChibiLib
