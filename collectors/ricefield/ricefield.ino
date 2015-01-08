@@ -40,7 +40,7 @@ void setup()
   
   // Initialize the chibi wireless stack
   chibiInit();
-
+  pinMode(VBAT_PIN, INPUT);
   Serial.println("Type,\tstatus,\tHumidity (%),\tTemperature (C)");
 }
 
@@ -75,13 +75,26 @@ void loop()
     add_to_tx_buf((char*)tx_buf, &dist);
   }
 
-  //Send data stored on "tx_buf" to aggregator (Satoyama edge router)
-  chibiTx(AGGREGATOR_SHORT_ADDRESS, tx_buf, TX_LENGTH);
+  // Read battery voltage
+  float vbat = VbatRead();
+  Reading battery_voltage = {"vbat", vbat, millis()};
+  add_to_tx_buf((char*) tx_buf, &battery_voltage);
 
   // Debug print
   Serial.println((char*) tx_buf);
 
+  //Send data stored on "tx_buf" to aggregator (Satoyama edge router)
+  chibiTx(AGGREGATOR_SHORT_ADDRESS, tx_buf, TX_LENGTH);
+
   //Wait
   delay(TX_INTERVAL);
   free(tx_buf);
+}
+
+float VbatRead(){
+  float batt;
+  unsigned int vbat = analogRead(VBAT_PIN);
+  
+  batt = ((vbat/1023.0) * ADCREFVOLTAGE) * 2;
+  return batt;
 }

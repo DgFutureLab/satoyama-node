@@ -1,15 +1,13 @@
 /*
 	COMMUNICATION SETUP
 */
-
 #define AGGREGATOR_SHORT_ADDRESS 42
-#define TX_INTERVAL 60
+#define TX_INTERVAL 5000
 #define TX_LENGTH 198
 
 /*
 	PIN DEFINITIONS
 */
-
 #define VBAT_PIN 31
 #define VSOL_PIN 29
 #define SONAR_PIN 6
@@ -19,3 +17,4 @@
 */
 
 #define VERBOSE 0
+#define ADCREFVOLTAGE 3.3
