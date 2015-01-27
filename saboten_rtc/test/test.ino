@@ -39,7 +39,7 @@ void setup()
   testSecondInterrupt();
 //  pinMode(interruptPin, INPUT);
 //
-//  attachInterrupt(2, testInterrupt, CHANGE);
+  attachInterrupt(2, testInterrupt, FALLING);
 }
 
 /**************************************************************************/
@@ -169,7 +169,7 @@ void setWakeupTime(){
 
 
 void testInterrupt(){
-  counter++;
+//  counter++;
   Serial.println("INTERRUPT");    
 }
 
