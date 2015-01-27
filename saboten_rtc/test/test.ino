@@ -29,23 +29,17 @@ PCF2127 pcf(0, 0, 0, rtcCsPin, &temp);
 /**************************************************************************/
 // Initialize
 /**************************************************************************/
-int interruptPin = 6;
+//int interruptPin = 6;
 
 void setup()
 {
   // Initialize the chibi command line and set the speed to 57600 bps
   chibiCmdInit(57600);
 
-  // set up rtc chip select
-  //  pinMode(rtcCsPin, OUTPUT);
-  //  digitalWrite(rtcCsPin, HIGH);
-
-
-  pinMode(interruptPin, INPUT);
-  //  chibiInit();
-
-
-  attachInterrupt(2, testInterrupt, CHANGE);
+  testSecondInterrupt();
+//  pinMode(interruptPin, INPUT);
+//
+//  attachInterrupt(2, testInterrupt, CHANGE);
 }
 
 /**************************************************************************/
@@ -56,60 +50,17 @@ boolean setTimer = true;
 void loop()
 {
 
-  int reading = digitalRead(interruptPin);
-  //  Serial.println(reading);
-
-  //  uint8_t hour, minute, second;
-  //  pcf.readTime(&hour, &minute, &second);
-  //  char time_buffer [50];
-  //  sprintf (time_buffer, "Now is: %u-%u-%u. Pin 6: %d", hour, minute, second, reading);
-  //  byte tmp = B00100011;
-  //  setControlBit(&tmp, 7, 1);
-  //  setControlBit(&tmp, 2, 1);
-  //  tmp |= B00000100;
-  //  Serial.println(tmp, BIN);
-  //  Serial.println(tmp, DEC);
-  setupControlRegisters();
-
-  //  Serial.print("Write to control: ");
-  //  byte toWrite = B11011111;
-  //  byte toWrite = B01011111;
-  //  byte toWrite = B00011111;
-
-
-  //    byte toWrite = B00011000;// OK
-
-  //  byte toWrite = B00010000;
-  //  Serial.println(toWrite, BIN);
-
-
-//  pcf.write(PCF_CONTROL_1, toWrite);
-//  byte ctr1 = pcf.read(PCF_CONTROL_1);
-//  Serial.print("Read control: ");
-//  Serial.println(ctr1, BIN);
-
-
   delay(1000);
-  //  if (setTimer == true){
-  //    setTimer = false;
-  //    setWakeupTime();
-  //    readTimerRegisters();
-  //    uint8_t control = pcf.read(PCF_CONTROL_1);
-  //    Serial.println(control, BIN);
-  //  }
-  //  printTime();
+  byte msf = pcf.read(PCF_CONTROL_2);
+  Serial.print("MSF: ");
+  Serial.println(msf, BIN);
+//  testSecondInterrupt();
 }
 
 void testSecondInterrupt(){
   enableSecondInterrupt();
   setInterruptToPulse();
 }
-
-void doStuff(){
-
-  // Set 
-}
-
 
 
 void enableSecondInterrupt(){
@@ -132,7 +83,7 @@ void enableMinuteInterrupt(){
 //  Serial.println(RC1, BIN);
 //  pcf.write(PCF_CONTROL_1, RC1);
 //  
-}
+
 
 void setupControlRegisters(){
 //  byte RC1 = 0;
@@ -171,6 +122,9 @@ void setInterruptToPermanent(){
 
 
 byte setControlBit(byte *controlByte, byte registerBit, boolean value){
+  /*
+
+  */
   *controlByte |= (value<<registerBit);
 }
 
