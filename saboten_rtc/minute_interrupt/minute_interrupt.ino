@@ -20,9 +20,16 @@ Collects data from different sensors and sends it to
 #include <SdFat.h>
 #include <pcf2127.h>
 
-int sdDetectPin = 19;
 
+int hgmPin = 14;
+int sdCsPin = 15;
 int rtcCsPin = 28; 
+int ledPin = 18;
+int sdDetectPin = 19;
+int vbatPin = 31;
+int vsolPin = 29;
+
+
 uint8_t temp;
 PCF2127 pcf(0, 0, 0, rtcCsPin, &temp);
 
@@ -36,24 +43,27 @@ void setup()
   // Initialize the chibi command line and set the speed to 57600 bps
   chibiCmdInit(57600);
 
-  testSecondInterrupt();
+//  testSecondInterrupt();
 //  pinMode(interruptPin, INPUT);
 //
-  attachInterrupt(2, testInterrupt, FALLING);
+  enableMinuteInterrupt();
+  setInterruptToPulse();
+
+  attachInterrupt(2, rtcInterrupt, FALLING);
 }
 
 /**************************************************************************/
 // Loop
 /**************************************************************************/
-int counter = 0;
-boolean setTimer = true;
 void loop()
 {
 
-  delay(1000);
-  byte msf = pcf.read(PCF_CONTROL_2);
-  Serial.print("MSF: ");
-  Serial.println(msf, BIN);
+//  delay(1000);
+//  byte msf = pcf.read(PCF_CONTROL_2);
+//  Serial.print("MSF: ");
+//  Serial.println(msf, BIN);
+//  delay(1000);
+  sleepMCU();
 //  testSecondInterrupt();
 }
 
@@ -61,6 +71,74 @@ void testSecondInterrupt(){
   enableSecondInterrupt();
   setInterruptToPulse();
 }
+
+void rtcInterrupt(){
+  detachInterrupt(2);
+}
+
+void sleepMCU()
+{
+  attachInterrupt(2, rtcInterrupt, FALLING);
+  Serial.println("Sleeping MCU");
+  delay(100);
+
+  // set pullups on inputs
+  pinMode(sdCsPin, INPUT);
+  digitalWrite(sdCsPin, HIGH);
+
+  pinMode(sdDetectPin, INPUT);
+  digitalWrite(sdDetectPin, LOW);
+
+  // write sleep mode
+//  sei() //   sleep enable interrupt
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  sleep_enable();                       // setting up for sleep ...
+  
+  ADCSRA &= ~(1 << ADEN);    // Disable ADC
+  sleep_mode();
+
+  sleep_disable();
+  doStuff();
+  
+
+}
+
+void doStuff(){
+  
+  Serial.println("I'm awake!");
+  for(int i = 5; i > 0; i--){
+    Serial.print("Going to sleep in ");
+    Serial.println(i);
+    delay(1000);
+  }
+  
+  
+}
+
+//void sleepRadio(int arg_cnt, char **args)
+//{
+//  int val = strtol(args[1], NULL, 10);
+//  
+//  if (val)
+//  {
+//    digitalWrite(hgmPin, LOW);
+//  
+//    // set up chibi regs to turn off external P/A
+//    chibiRegWrite(0x4, 0x20);
+//  }
+//  else
+//  {
+//    digitalWrite(hgmPin, HIGH);
+//    
+//    // set up chibi regs to turn on external P/A
+//    chibiRegWrite(0x4, 0xA0);
+//  }
+//  
+//  // turn on/off radio
+//  chibiSleepRadio(val);
+//}
+//
+//
 
 
 void enableSecondInterrupt(){
@@ -76,37 +154,7 @@ void enableMinuteInterrupt(){
   setControlBit(&RC1, BIT_SI, 0); // disable second interrupt
   pcf.write(PCF_CONTROL_1, RC1);
 }  
-//  byte RC2 = pcf.read(PCF_CONTROL_2);
-//  setControlBit(&RC1, BIT_MI, 0); // second interrupt
-//  setControlBit(&RC1, BIT_SI, 1); // second interrupt
-//  Serial.print("Set control register 1 to: ");
-//  Serial.println(RC1, BIN);
-//  pcf.write(PCF_CONTROL_1, RC1);
-//  
 
-
-void setupControlRegisters(){
-//  byte RC1 = 0;
-//  setControlBit(&RC1, BIT_EXT_TEST, 0); //Normal mode
-//  setControlBit(&RC1, BIT_STOP, 0); // source clock runs
-//  setControlBit(&RC1, BIT_TSF_1, 0); // no timestamp interrupts are generated
-//  setControlBit(&RC1, BIT_POR_OVRD, 0); // power on reset normal mode
-//  setControlBit(&RC1, BIT_12_24, 0); // set to 24h mode 
-//  setControlBit(&RC1, BIT_MI, 0); // no minute interrupt
-//  setControlBit(&RC1, BIT_SI, 0); // no second interrupt
-//  Serial.print("Set control register 1 to: ");
-//  Serial.println(RC1, BIN);
-//  pcf.write(PCF_CONTROL_1, RC1);
-//
-//  byte RC2;
-//  setControlBit(&RC2, BIT_MSF, 7); //No minute or second interrupt is generated
-//  setControlBit(&RC2, BIT_WDTF, 0); //No watchdog interrupts are generated
-//  setControlBit(&RC2, BIT_TSF_2, 0); //no timestamp interrupt
-//  setControlBit(&RC2, BIT_AF, 0); // flag set when interrupt cleared
-//  setControlBit(&RC2, BIT_CDTF, 0); // No countdown timer interrupt will be generated
-//  setControlBit(&RC2, BIT_TSIE, 0); // No interrupt generated from timestamp flag
-//  setControlBit(&RC2, BIT_AIE, 0); 
-}
 
 void setInterruptToPulse(){
   byte reg_10h = pcf.read(PCF_WATCHDOG_TIM_CTL);
@@ -163,53 +211,12 @@ void setWakeupTime(){
   pcf.alarmWriteTime(hour, minute, second);
   pcf.readModWriteBit(PCF_CONTROL_2, BIT_AIE, 1);    
 
-
 }
 
 
 
-void testInterrupt(){
-//  counter++;
-  Serial.println("INTERRUPT");    
-}
 
 
-void cmdSleepMcu(int arg_cnt, char **args)
-{
-  printf("Sleeping MCU\n");
-  delay(100);
-
-  // set pullups on inputs
-  //  pinMode(sdCsPin, INPUT);
-  //nn  digitalWrite(sdCsPin, HIGH);
-
-  //  pinMode(sdDetectPin, INPUT);
-  digitalWrite(sdDetectPin, LOW);
-
-  // write sleep mode
-  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-  sleep_enable();                       // setting up for sleep ...
-  ADCSRA &= ~(1 << ADEN);    // Disable ADC
-  sleep_mode();
-}
-
-
-void bcdTest(){
-  uint8_t second = B11010001;
-  uint8_t mask = B01111111;
-  uint8_t masked;
-  masked = second & mask;
-  Serial.print("Masked (BIN): ");
-  Serial.println(masked, BIN); //Expect B01010001
-  Serial.print("Masked (DEC): ");
-  Serial.println(masked, DEC); //Expect 81
-  uint8_t decoded;
-  decoded = pcf.bcdDecode(masked);
-  Serial.print("Decoded (DEC): ");
-  Serial.println(decoded, DEC); //Expect 51
-  Serial.print("Decoded (BIN): ");
-  Serial.println(decoded, BIN); //Expect B00110011
-}
 
 
 
