@@ -56,5 +56,5 @@ Check that the FTDI Breakout board switch is on 5V
 5. Upload it to the board
 6. Open Arduino IDE's Serial Monitor
 7. Set the communication to Carriage return and 57600 baud
-8. Set the short address of this collector node by hand writing *setsaddr* '<address>'  in the serial monitor command prompt (The address is currently (as of Jan, 2015) set via the script in satoyama-konohana) 
+8. Set the short address of this collector node by hand writing *setsaddr* '< address >'  in the serial monitor command prompt (The address is currently (as of Jan, 2015) set via the script in satoyama-konohana) 
 9. Upload collector/collector.ino into your Saboten board. (Include all the necessary libs from third-party-libs folder)
