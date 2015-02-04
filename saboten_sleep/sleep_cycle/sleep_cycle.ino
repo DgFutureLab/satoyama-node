@@ -41,12 +41,23 @@ PCF2127 pcf(0, 0, 0, rtcCsPin, &temp);
 void setup()
 {
   // Initialize the chibi command line and set the speed to 57600 bps
+  
   chibiCmdInit(57600);
+
+  // set up rtc chip select
+  pinMode(rtcCsPin, OUTPUT);
+  digitalWrite(rtcCsPin, HIGH);
+
+  pinMode(sdCsPin, INPUT);
+  digitalWrite(sdCsPin, HIGH);
+
+  pinMode(sdDetectPin, INPUT);
+  digitalWrite(sdDetectPin, LOW);
 
 //  testSecondInterrupt();
 //  pinMode(interruptPin, INPUT);
 //
-  enableMinuteInterrupt();
+  enableSecondInterrupt();
   setInterruptToPulse();
 
   attachInterrupt(2, rtcInterrupt, FALLING);
@@ -83,21 +94,25 @@ void sleepMCU()
   delay(100);
 
   // set pullups on inputs
-  pinMode(sdCsPin, INPUT);
-  digitalWrite(sdCsPin, HIGH);
-
-  pinMode(sdDetectPin, INPUT);
-  digitalWrite(sdDetectPin, LOW);
+  
 
   // write sleep mode
 //  sei() //   sleep enable interrupt
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-  sleep_enable();                       // setting up for sleep ...
+  sleepRadio(true);
+  sleep_enable();        // setting up for sleep ...
   
   ADCSRA &= ~(1 << ADEN);    // Disable ADC
   sleep_mode();
 
   sleep_disable();
+//  sleepRadio(false);
+//  pinMode(sdCsPin, INPUT);
+//  digitalWrite(sdCsPin, LOW);
+//
+//  pinMode(sdDetectPin, INPUT);
+//  digitalWrite(sdDetectPin, HIGH);
+
   doStuff();
   
 
@@ -109,34 +124,33 @@ void doStuff(){
   for(int i = 5; i > 0; i--){
     Serial.print("Going to sleep in ");
     Serial.println(i);
-    delay(1000);
+    delay(100);
   }
   
   
 }
 
-//void sleepRadio(int arg_cnt, char **args)
-//{
-//  int val = strtol(args[1], NULL, 10);
-//  
-//  if (val)
-//  {
-//    digitalWrite(hgmPin, LOW);
-//  
-//    // set up chibi regs to turn off external P/A
-//    chibiRegWrite(0x4, 0x20);
-//  }
-//  else
-//  {
-//    digitalWrite(hgmPin, HIGH);
-//    
-//    // set up chibi regs to turn on external P/A
-//    chibiRegWrite(0x4, 0xA0);
-//  }
-//  
-//  // turn on/off radio
-//  chibiSleepRadio(val);
-//}
+void sleepRadio(byte val)
+{
+  
+  if (val)
+  {
+    digitalWrite(hgmPin, LOW);
+  
+    // set up chibi regs to turn off external P/A
+    chibiRegWrite(0x4, 0x20);
+  }
+  else
+  {
+    digitalWrite(hgmPin, HIGH);
+    
+    // set up chibi regs to turn on external P/A
+    chibiRegWrite(0x4, 0xA0);
+  }
+  
+  // turn on/off radio
+  chibiSleepRadio(val);
+}
 //
 //
 
