@@ -30,8 +30,8 @@ unsigned char buf[100];
 
 // this is for printf
 static FILE uartout = {0};  
-
-PCF2127 pcf(0, 0, 0, rtcCsPin);
+uint8_t temp;
+PCF2127 pcf(0, 0, 0, rtcCsPin, &temp);
 
 /**************************************************************************/
 // Initialize
