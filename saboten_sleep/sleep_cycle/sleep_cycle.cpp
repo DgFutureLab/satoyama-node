@@ -8,7 +8,7 @@ Collects data from different sensors and sends it to
 // satoyama-chibi-lib includes
 // Defines pin numbers for sensors and also a simple format to send
 // information to the satoyama edge router
-#include <config.h>
+#include <satoyama_config.h>
 #include <utilsawesome.h>
 
 // Saboten includes
@@ -57,8 +57,8 @@ void setup()
 //  testSecondInterrupt();
 //  pinMode(interruptPin, INPUT);
 //
-  enableSecondInterrupt();
-  setInterruptToPulse();
+  pcf.enableSecondInterrupt();
+  pcf.setInterruptToPulse();
 
   attachInterrupt(2, rtcInterrupt, FALLING);
 }
@@ -78,10 +78,12 @@ void loop()
 //  testSecondInterrupt();
 }
 
+/*
 void testSecondInterrupt(){
   enableSecondInterrupt();
   setInterruptToPulse();
 }
+*/
 
 void rtcInterrupt(){
   detachInterrupt(2);
