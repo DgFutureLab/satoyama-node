@@ -1,0 +1,4 @@
+log.txt
+abuild/
+*.swp
+build/**
