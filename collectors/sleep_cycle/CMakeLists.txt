@@ -40,7 +40,7 @@ set(${PROJECT_NAME}_BOARD saboten)
 set(${PROJECT_NAME}_SRCS sleep_cycle.cpp)
 
 # Define the port for uploading code to the Arduino
-set(${PROJECT_NAME}_PORT /dev/tty.usbserial-A501KA6M)
+set(${PROJECT_NAME}_PORT /dev/tty.usbserial-A4011F64)
 
 # Command to generate code arduino firmware (.hex file)
 generate_arduino_firmware(${PROJECT_NAME})

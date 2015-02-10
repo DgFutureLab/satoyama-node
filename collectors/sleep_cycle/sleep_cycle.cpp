@@ -54,11 +54,11 @@ void setup()
   pinMode(sdDetectPin, INPUT);
   digitalWrite(sdDetectPin, LOW);
 
-//  testSecondInterrupt();
+ // testSecondInterrupt();
 //  pinMode(interruptPin, INPUT);
 //
-  // pcf.enableSecondInterrupt();
-  // pcf.setInterruptToPulse();
+  pcf.enableSecondInterrupt();
+  pcf.setInterruptToPulse();
 
   attachInterrupt(2, rtcInterrupt, FALLING);
 }
