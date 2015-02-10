@@ -3,6 +3,7 @@ Collects data from different sensors and sends it to
  the aggregator as defined in "config.h"
  */
 
+#include "sleep_cycle.h"
 #include <chibi.h>
 
 // satoyama-chibi-lib includes
@@ -28,7 +29,6 @@ int ledPin = 18;
 int sdDetectPin = 19;
 int vbatPin = 31;
 int vsolPin = 29;
-
 
 uint8_t temp;
 PCF2127 pcf(0, 0, 0, rtcCsPin, &temp);
@@ -57,8 +57,8 @@ void setup()
 //  testSecondInterrupt();
 //  pinMode(interruptPin, INPUT);
 //
-  pcf.enableSecondInterrupt();
-  pcf.setInterruptToPulse();
+  // pcf.enableSecondInterrupt();
+  // pcf.setInterruptToPulse();
 
   attachInterrupt(2, rtcInterrupt, FALLING);
 }
@@ -132,7 +132,7 @@ void doStuff(){
   
 }
 
-void sleepRadio(byte val)
+void sleepRadio(bool val)
 {
   
   if (val)
@@ -157,74 +157,74 @@ void sleepRadio(byte val)
 //
 
 
-void enableSecondInterrupt(){
-  byte RC1 = pcf.read(PCF_CONTROL_1);
-  setControlBit(&RC1, BIT_MI, 0); // disable minute interrupt
-  setControlBit(&RC1, BIT_SI, 1); // enable second interrupt
-  pcf.write(PCF_CONTROL_1, RC1);
-}  
+// void enableSecondInterrupt(){
+//   byte RC1 = pcf.read(PCF_CONTROL_1);
+//   setControlBit(&RC1, BIT_MI, 0); // disable minute interrupt
+//   setControlBit(&RC1, BIT_SI, 1); // enable second interrupt
+//   pcf.write(PCF_CONTROL_1, RC1);
+// }  
 
-void enableMinuteInterrupt(){
-  byte RC1 = pcf.read(PCF_CONTROL_1);
-  setControlBit(&RC1, BIT_MI, 1); // enable minute interrupt
-  setControlBit(&RC1, BIT_SI, 0); // disable second interrupt
-  pcf.write(PCF_CONTROL_1, RC1);
-}  
-
-
-void setInterruptToPulse(){
-  byte reg_10h = pcf.read(PCF_WATCHDOG_TIM_CTL);
-  reg_10h |= B00100000;
-  pcf.write(PCF_WATCHDOG_TIM_CTL, reg_10h);
-}
-
-void setInterruptToPermanent(){
-  byte reg_10h = pcf.read(PCF_WATCHDOG_TIM_CTL);
-  reg_10h &= B11011111;
-  pcf.write(PCF_WATCHDOG_TIM_CTL, reg_10h);
-}
+// void enableMinuteInterrupt(){
+//   byte RC1 = pcf.read(PCF_CONTROL_1);
+//   setControlBit(&RC1, BIT_MI, 1); // enable minute interrupt
+//   setControlBit(&RC1, BIT_SI, 0); // disable second interrupt
+//   pcf.write(PCF_CONTROL_1, RC1);
+// }  
 
 
-byte setControlBit(byte *controlByte, byte registerBit, boolean value){
-  /*
+// void setInterruptToPulse(){
+//   byte reg_10h = pcf.read(PCF_WATCHDOG_TIM_CTL);
+//   reg_10h |= B00100000;
+//   pcf.write(PCF_WATCHDOG_TIM_CTL, reg_10h);
+// }
 
-  */
-  *controlByte |= (value<<registerBit);
-}
-
-void readTimerRegisters(){
-  char buffer [100];
-  uint8_t hour_set, minute_set, second_set;
-  pcf.alarmReadTime(&hour_set, &minute_set, &second_set);
-  sprintf(buffer, "ALARM TIME IN REGISTERS: hour: %u, minute: %u, second: %u", hour_set, minute_set, second_set);
-  Serial.println((char*) buffer);
-}
-
-void printTime(){
-  char buffer [100];
-  uint8_t hour_set, minute_set, second_set;
-  pcf.readTime(&hour_set, &minute_set, &second_set);
-  sprintf(buffer, "TIME NOW: hour: %u, minute: %u, second: %u", hour_set, minute_set, second_set);
-  Serial.println((char*) buffer); 
-}
+// void setInterruptToPermanent(){
+//   byte reg_10h = pcf.read(PCF_WATCHDOG_TIM_CTL);
+//   reg_10h &= B11011111;
+//   pcf.write(PCF_WATCHDOG_TIM_CTL, reg_10h);
+// }
 
 
-void setWakeupTime(){
-  uint8_t hour, minute, second;
+// byte setControlBit(byte *controlByte, byte registerBit, boolean value){
+//   /*
+
+//   */
+//   *controlByte |= (value<<registerBit);
+// }
+
+// void readTimerRegisters(){
+//   char buffer [100];
+//   uint8_t hour_set, minute_set, second_set;
+//   pcf.alarmReadTime(&hour_set, &minute_set, &second_set);
+//   sprintf(buffer, "ALARM TIME IN REGISTERS: hour: %u, minute: %u, second: %u", hour_set, minute_set, second_set);
+//   Serial.println((char*) buffer);
+// }
+
+// void printTime(){
+//   char buffer [100];
+//   uint8_t hour_set, minute_set, second_set;
+//   pcf.readTime(&hour_set, &minute_set, &second_set);
+//   sprintf(buffer, "TIME NOW: hour: %u, minute: %u, second: %u", hour_set, minute_set, second_set);
+//   Serial.println((char*) buffer); 
+// }
 
 
-  pcf.readTime(&hour, &minute, &second);
-  char time_buffer [100];
-  sprintf (time_buffer, "CURRENT TIME: %u-%u-%u", hour, minute, second);
-  Serial.println((char*) time_buffer);
-
-  second = (second + 5) % 60;
-  char wakeuptime_buffer [100];
-  sprintf (wakeuptime_buffer, "ALARM TIME TO WRITE: %u-%u-%u", hour, minute, second);
-  Serial.println((char*) wakeuptime_buffer);
+// void setWakeupTime(){
+//   uint8_t hour, minute, second;
 
 
-  pcf.alarmWriteTime(hour, minute, second);
-  pcf.readModWriteBit(PCF_CONTROL_2, BIT_AIE, 1);    
+//   pcf.readTime(&hour, &minute, &second);
+//   char time_buffer [100];
+//   sprintf (time_buffer, "CURRENT TIME: %u-%u-%u", hour, minute, second);
+//   Serial.println((char*) time_buffer);
 
-}
+//   second = (second + 5) % 60;
+//   char wakeuptime_buffer [100];
+//   sprintf (wakeuptime_buffer, "ALARM TIME TO WRITE: %u-%u-%u", hour, minute, second);
+//   Serial.println((char*) wakeuptime_buffer);
+
+
+//   pcf.alarmWriteTime(hour, minute, second);
+//   pcf.readModWriteBit(PCF_CONTROL_2, BIT_AIE, 1);    
+
+// }
