@@ -1,4 +1,4 @@
 log.txt
 abuild/
 *.swp
-build/**
+**/build/
