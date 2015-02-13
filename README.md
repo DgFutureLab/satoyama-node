@@ -53,8 +53,11 @@ Check that the FTDI Breakout board switch is on 5V
 
 
 4. Open test_saboten/test_saboten.ino
-5. Upload it to the board
-6. Open Arduino IDE's Serial Monitor
-7. Set the communication to Carriage return and 57600 baud
-8. Set the short address of this collector node by hand writing   *setsaddr* \<address\>  in the serial monitor command prompt (The address is currently (as of Jan, 2015) set via the script in satoyama-konohana) 
+5. Select your board on the dropdown menu Tool>Board
+    FreakLabs Saboten for the saboten
+    Arduino Pro or ProMini (3.3V, 8MHz) w/ATmega328
+6. Upload it to the board
+7. Open Arduino IDE's Serial Monitor
+8. Set the communication to Carriage return and 57600 baud
+9. Set the short address of this collector node by hand writing   *setsaddr* \<address\>  in the serial monitor command prompt (The address is currently (as of Jan, 2015) set via the script in satoyama-konohana) 
 9. Upload collector/collector.ino into your Saboten board. (Include all the necessary libs from third-party-libs folder)
