@@ -52,10 +52,9 @@ Check that the FTDI Breakout board switch is on 5V
 3. For OSX users, download the FTDI drivers from http://www.ftdichip.com/Drivers/VCP.htm
 
 
-4. Open test_saboten/test_saboten.ino
-5. Select your board on the dropdown menu Tool>Board
-    FreakLabs Saboten for the saboten
-    Arduino Pro or ProMini (3.3V, 8MHz) w/ATmega328
+4. Open test_saboten/test_saboten.ino (for saboten)
+4. Open File>Examples>Chibiarduino-master>4.cmdline (for Chibi)
+5. Select your board on the dropdown menu Tool>Board>(FreakLabs Saboten for the saboten) or (Arduino Pro or ProMini (3.3V, 8MHz) w/ATmega328)
 6. Upload it to the board
 7. Open Arduino IDE's Serial Monitor
 8. Set the communication to Carriage return and 57600 baud
