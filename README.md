@@ -1,7 +1,7 @@
 satoyama-node
 =============
 
-Satoyama Sensor Network node stack
+Satoyama Sensor Network node stack. This stack is designed to connect chibis and sabotens to <a href="https://github.com/DgFutureLab/satoyama-api">Satoyama API</a>. Created by <a href="http://fljapan.com/">Future Lab</a> based on <a href="http://www.freaklabsstore.com">Freaklabs open hardware</a>.
 
 # Prerequisites
 
