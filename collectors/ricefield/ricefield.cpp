@@ -53,6 +53,7 @@ void setup()
   // Initialize the chibi command line and set the speed to 57600 bps
   
   chibiCmdInit(57600);
+  chibiInit();
 
   // set up rtc chip select
   pinMode(rtcCsPin, OUTPUT);
@@ -63,6 +64,9 @@ void setup()
 
   pinMode(sdDetectPin, INPUT);
   digitalWrite(sdDetectPin, LOW);
+
+  pinMode(hgmPin, OUTPUT);
+  digitalWrite(hgmPin, LOW);
 
   pcf.enableMinuteInterrupt();
   pcf.setInterruptToPulse();
