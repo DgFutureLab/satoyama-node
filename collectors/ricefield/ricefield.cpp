@@ -153,7 +153,7 @@ void doStuff(){
   for(int i = 5; i > 0; i--){
     Serial.print("Going to sleep in ");
     Serial.println(i);
-    delay(100);
+    delay(1000);
   }
   
   
