@@ -21,6 +21,8 @@ link_directories(${SATOYAMA_LIBS}/chibiArduino-master/)
 link_directories(${SATOYAMA_LIBS}/SatoyamaChibiLib/)
 link_directories(${SATOYAMA_LIBS}/SdFat/)
 link_directories(${SATOYAMA_LIBS}/PCF2127/)
+link_directories(${SATOYAMA_LIBS}/Humidity_Temperature_Sensor/)
+link_directories(${SATOYAMA_LIBS}/NewPing/)
 
 # Define your project and language
 project(${PROJECT_NAME} C CXX)
@@ -37,7 +39,7 @@ set(${PROJECT_NAME}_BOARD saboten)
 
 
 # Define the source code
-set(${PROJECT_NAME}_SRCS sleep_cycle.cpp)
+set(${PROJECT_NAME}_SRCS ricefield.cpp)
 
 # Define the port for uploading code to the Arduino
 set(${PROJECT_NAME}_PORT /dev/tty.usbserial-A4011F64)
