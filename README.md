@@ -1,7 +1,7 @@
 satoyama-node
 =============
 
-Satoyama Sensor Network node stack
+Satoyama Sensor Network node stack. This stack is designed to connect chibis and sabotens to <a href="https://github.com/DgFutureLab/satoyama-api">Satoyama API</a>. Created by <a href="http://fljapan.com/">Future Lab</a> based on <a href="http://www.freaklabsstore.com">Freaklabs open hardware</a>.
 
 # Prerequisites
 
@@ -52,9 +52,21 @@ Check that the FTDI Breakout board switch is on 5V
 3. For OSX users, download the FTDI drivers from http://www.ftdichip.com/Drivers/VCP.htm
 
 
-4. Open test_saboten/test_saboten.ino
-5. Upload it to the board
-6. Open Arduino IDE's Serial Monitor
-7. Set the communication to Carriage return and 57600 baud
-8. Set the short address of this collector node by hand writing   *setsaddr* \<address\>  in the serial monitor command prompt (The address is currently (as of Jan, 2015) set via the script in satoyama-konohana) 
+4. Open test_saboten/test_saboten.ino (for saboten)
+4. Open File>Examples>Chibiarduino-master>4.cmdline (for Chibi)
+5. Select your board on the dropdown menu Tool>Board>(FreakLabs Saboten for the saboten) or (Arduino Pro or ProMini (3.3V, 8MHz) w/ATmega328)
+6. Upload it to the board
+7. Open Arduino IDE's Serial Monitor
+8. Set the communication to Carriage return and 57600 baud
+9. Set the short address of this collector node by hand writing   *setsaddr* \<address\>  in the serial monitor command prompt. The address should be in HEXADECIMAL. (The address is currently (as of Jan, 2015) set via the script in satoyama-konohana) 
 9. Upload collector/collector.ino into your Saboten board. (Include all the necessary libs from third-party-libs folder)
+
+## Setup build system with CMake
+Before we wrote the sketches using the Arduino GUI, but now we use standard CMake to generate make files.
+
+1. Install CMake (e.g. brew install cmake on OSX)
+2. Change directory into the folder containing the source code that you want to run on the board.
+3. mkdir build (all the build files will be stored in this directory)
+4. Navigate to build directory: cd build 
+5. compile source code and upload to the device: cmake .. -Wno-dev && make && make upload (make sure that the build directory is empty, as CMake will complain otherwise)
+6. Use screen to monitor output from the serial device (e.g. tty.usbserial-A501K9HW): /dev/tty.usbserial-A501K9HW 57600,sc8
