@@ -3,7 +3,7 @@ Collects data from different sensors and sends it to
  the aggregator as defined in "config.h"
  */
 
-#include "sleep_cycle.h"
+#include "ricefield.h"
 #include <chibi.h>
 
 // satoyama-chibi-lib includes
@@ -20,6 +20,16 @@ Collects data from different sensors and sends it to
 #include <SPI.h>
 #include <SdFat.h>
 #include <pcf2127.h>
+
+ //Temperature and humidity library
+#include "DHT.h"
+#define DHTTYPE DHT11   // Type of DHT sensor, in our case we are using DHT11
+#define DHT11_PIN A0    // Pin where the DHT11 is connected
+dht DHT;
+
+//Sonnar library
+#include <NewPing.h>
+NewPing sonar(SONAR_PIN,SONAR_PIN,200);
 
 
 int hgmPin = 14;
@@ -54,10 +64,7 @@ void setup()
   pinMode(sdDetectPin, INPUT);
   digitalWrite(sdDetectPin, LOW);
 
- // testSecondInterrupt();
-//  pinMode(interruptPin, INPUT);
-//
-  pcf.enableSecondInterrupt();
+  pcf.enableMinuteInterrupt();
   pcf.setInterruptToPulse();
 
   attachInterrupt(2, rtcInterrupt, FALLING);
@@ -68,22 +75,11 @@ void setup()
 /**************************************************************************/
 void loop()
 {
-
-//  delay(1000);
-//  byte msf = pcf.read(PCF_CONTROL_2);
-//  Serial.print("MSF: ");
-//  Serial.println(msf, BIN);
-//  delay(1000);
   sleepMCU();
-//  testSecondInterrupt();
+  read_sensors();
+  doStuff();
 }
 
-/*
-void testSecondInterrupt(){
-  enableSecondInterrupt();
-  setInterruptToPulse();
-}
-*/
 
 void rtcInterrupt(){
   detachInterrupt(2);
@@ -92,37 +88,68 @@ void rtcInterrupt(){
 void sleepMCU()
 {
   attachInterrupt(2, rtcInterrupt, FALLING);
-  Serial.println("Sleeping MCU");
   delay(100);
 
-  // set pullups on inputs
-  
-
-  // write sleep mode
-//  sei() //   sleep enable interrupt
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-  sleepRadio(true);
+  sleep_radio(true);
   sleep_enable();        // setting up for sleep ...
   
   ADCSRA &= ~(1 << ADEN);    // Disable ADC
   sleep_mode();
 
   sleep_disable();
-//  sleepRadio(false);
-//  pinMode(sdCsPin, INPUT);
-//  digitalWrite(sdCsPin, LOW);
-//
-//  pinMode(sdDetectPin, INPUT);
-//  digitalWrite(sdDetectPin, HIGH);
-
-  doStuff();
-  
+  sleep_radio(false);
 
 }
 
-void doStuff(){
+void read_sensors(){
+  Serial.println("Reading sensors...");
+
+  uint8_t tx_buf[TX_LENGTH];
+  memset(tx_buf, 0, TX_LENGTH);
+  long duration, inches, cm;
+
+  // Read temperature
+  float temperature = DHT.temperature;  
+  if (temperature > 0) {
+    Reading temp = {"temperature", temperature, millis()};
+    add_to_tx_buf((char*)tx_buf, &temp);
+  }
+
+  // Read humidity
+  float humidity = DHT.humidity;
+  if (humidity > 0) {
+    Reading hum = {"humidity", humidity , millis()};
+    add_to_tx_buf((char*)tx_buf, &hum);
+  }
+
+  // Read sonar distance
+  float distance = sonar.ping() / US_ROUNDTRIP_CM; 
   
-  Serial.println("I'm awake!");
+  if (distance > 0) {
+    Reading dist = {"distance", distance, millis()};
+    add_to_tx_buf((char*)tx_buf, &dist);
+  }
+
+  // Read battery voltage
+  float vbat = read_vbat();
+  Reading battery_voltage = {"vbat", vbat, millis()};
+  add_to_tx_buf((char*) tx_buf, &battery_voltage);
+
+  // Debug print
+  Serial.println((char*) tx_buf);
+
+  Serial.println("Transmitting data...");
+  //Send data stored on "tx_buf" to aggregator (Satoyama edge router)
+  chibiTx(AGGREGATOR_SHORT_ADDRESS, tx_buf, TX_LENGTH);
+
+  //Wait
+  // delay(TX_INTERVAL);
+  free(tx_buf);
+  Serial.println("Done transmitting...");
+}
+
+void doStuff(){
   for(int i = 5; i > 0; i--){
     Serial.print("Going to sleep in ");
     Serial.println(i);
@@ -132,7 +159,7 @@ void doStuff(){
   
 }
 
-void sleepRadio(bool val)
+void sleep_radio(bool val)
 {
   
   if (val)
@@ -153,6 +180,15 @@ void sleepRadio(bool val)
   // turn on/off radio
   chibiSleepRadio(val);
 }
+
+float read_vbat(){
+  float batt;
+  unsigned int vbat = analogRead(VBAT_PIN);
+  
+  batt = ((vbat/1023.0) * ADCREFVOLTAGE) * 2;
+  return batt;
+}
+
 //
 //
 
