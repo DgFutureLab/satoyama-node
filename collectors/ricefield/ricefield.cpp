@@ -36,7 +36,7 @@ int hgmPin = 14;
 int sdCsPin = 15;
 int rtcCsPin = 28; 
 int ledPin = 18;
-int sdDetectPin = 19;
+int sdDetectPin = 19; 
 int vbatPin = 31;
 int vsolPin = 29;
 
@@ -77,11 +77,15 @@ void setup()
 /**************************************************************************/
 // Loop
 /**************************************************************************/
+
 void loop()
-{
-  sleepMCU();
+{ 
+  for(int i = 0; i++; i<60){
+    sleepMCU();
+  }
+  wakeup_radio();
   read_sensors();
-  doStuff();
+  sleep_radio();
 }
 
 
@@ -95,14 +99,14 @@ void sleepMCU()
   delay(100);
 
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-  sleep_radio(true);
+  // sleep_radio(true);
   sleep_enable();        // setting up for sleep ...
   
   ADCSRA &= ~(1 << ADEN);    // Disable ADC
   sleep_mode();
 
   sleep_disable();
-  sleep_radio(false);
+  // sleep_radio(false);
 
 }
 
@@ -153,36 +157,48 @@ void read_sensors(){
   Serial.println("Done transmitting...");
 }
 
-void doStuff(){
-  for(int i = 5; i > 0; i--){
-    Serial.print("Going to sleep in ");
-    Serial.println(i);
-    delay(1000);
-  }
+// void doStuff(){
+//   for(int i = 5; i > 0; i--){
+//     Serial.print("Going to sleep in ");
+//     Serial.println(i);
+//     delay(1000);
+//   }
   
   
-}
+// }
 
-void sleep_radio(bool val)
-{
+// void sleep_radio(bool val)
+// {
   
-  if (val)
-  {
-    digitalWrite(hgmPin, LOW);
+//   if (val)
+//   {
+//     digitalWrite(hgmPin, LOW);
   
+//     // set up chibi regs to turn off external P/A
+//     chibiRegWrite(0x4, 0x20);
+//   }
+//   else
+//   {
+//     digitalWrite(hgmPin, HIGH);
+    
+//     // set up chibi regs to turn on external P/A
+//     chibiRegWrite(0x4, 0xA0);
+//   }
+  
+//   // turn on/off radio
+//   chibiSleepRadio(val);
+// }
+
+void sleep_radio(){
+  digitalWrite(hgmPin, LOW);
     // set up chibi regs to turn off external P/A
     chibiRegWrite(0x4, 0x20);
-  }
-  else
-  {
-    digitalWrite(hgmPin, HIGH);
-    
+}
+
+void wakeup_radio(){
+  digitalWrite(hgmPin, HIGH);
     // set up chibi regs to turn on external P/A
     chibiRegWrite(0x4, 0xA0);
-  }
-  
-  // turn on/off radio
-  chibiSleepRadio(val);
 }
 
 float read_vbat(){

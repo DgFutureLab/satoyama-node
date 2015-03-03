@@ -356,6 +356,7 @@ void cmdSleepMcu(int arg_cnt, char **args)
 /**************************************************************************/
 void cmdSleepRadio(int arg_cnt, char **args)
 {
+  Serial.println("Sleeping radio");
   int val = strtol(args[1], NULL, 10);
   
   if (val)
