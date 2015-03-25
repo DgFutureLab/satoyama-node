@@ -5,6 +5,7 @@ Collects data from different sensors and sends it to
 
 #include "ricefield.h"
 #include <chibi.h>
+#include <saboten.h>
 
 // satoyama-chibi-lib includes
 // Defines pin numbers for sensors and also a simple format to send
@@ -32,16 +33,17 @@ dht DHT;
 NewPing sonar(SONAR_PIN,SONAR_PIN,200);
 
 
-int hgmPin = 14;
-int sdCsPin = 15;
-int rtcCsPin = 28; 
-int ledPin = 18;
-int sdDetectPin = 19; 
+int HIGH_GAIN_MODE_PIN = 14;
+int SD_CHIPSELECT_PIN = 15;
+int RTC_CHIPSELECT_PIN = 28; 
+int LED_PIN = 18;
+int SD_DETECT_PIN = 19; 
 int vbatPin = 31;
 int vsolPin = 29;
 
 uint8_t temp;
-PCF2127 pcf(0, 0, 0, rtcCsPin, &temp);
+PCF2127 pcf(0, 0, 0, RTC_CHIPSELECT_PIN, &temp);
+Saboten board;
 
 /**************************************************************************/
 // Initialize
@@ -56,19 +58,20 @@ void setup()
   chibiInit();
 
   // set up rtc chip select
-  pinMode(rtcCsPin, OUTPUT);
-  digitalWrite(rtcCsPin, HIGH);
+  pinMode(RTC_CHIPSELECT_PIN, OUTPUT);
+  digitalWrite(RTC_CHIPSELECT_PIN, HIGH);
 
-  pinMode(sdCsPin, INPUT);
-  digitalWrite(sdCsPin, HIGH);
+  pinMode(SD_CHIPSELECT_PIN, INPUT);
+  digitalWrite(SD_CHIPSELECT_PIN, HIGH);
 
-  pinMode(sdDetectPin, INPUT);
-  digitalWrite(sdDetectPin, LOW);
+  pinMode(SD_DETECT_PIN, INPUT);
+  digitalWrite(SD_DETECT_PIN, LOW);
 
-  pinMode(hgmPin, OUTPUT);
-  digitalWrite(hgmPin, LOW);
+  pinMode(HIGH_GAIN_MODE_PIN, OUTPUT);
+  digitalWrite(HIGH_GAIN_MODE_PIN, LOW);
 
   pcf.enableMinuteInterrupt();
+  // pcf.enableSecondInterrupt();
   pcf.setInterruptToPulse();
 
   attachInterrupt(2, rtcInterrupt, FALLING);
@@ -80,11 +83,15 @@ void setup()
 
 void loop()
 { 
-  for(int i = 0; i++; i<60){
-    sleepMCU();
-  }
+  // for(int i = 0; i++; i<30){
+  //   sleepMCU();
+  // }
+
+  board.sleep_mcu();
+  // sleepMCU();
   wakeup_radio();
   read_sensors();
+  // delay(1000);
   sleep_radio();
 }
 
@@ -102,10 +109,12 @@ void sleepMCU()
   // sleep_radio(true);
   sleep_enable();        // setting up for sleep ...
   
-  ADCSRA &= ~(1 << ADEN);    // Disable ADC
+  // ADCSRA &= ~(1 << ADEN);    // Disable ADC
   sleep_mode();
 
   sleep_disable();
+  // ADCSRA |= ~(1 << ADEN);
+  // ADCSRA &= ~(0 << ADEN);    // Disable ADC
   // sleep_radio(false);
 
 }
@@ -150,6 +159,7 @@ void read_sensors(){
   Serial.println("Transmitting data...");
   //Send data stored on "tx_buf" to aggregator (Satoyama edge router)
   chibiTx(AGGREGATOR_SHORT_ADDRESS, tx_buf, TX_LENGTH);
+  // chibiTx(20, tx_buf, TX_LENGTH);
 
   //Wait
   // delay(TX_INTERVAL);
@@ -172,14 +182,14 @@ void read_sensors(){
   
 //   if (val)
 //   {
-//     digitalWrite(hgmPin, LOW);
+//     digitalWrite(HIGH_GAIN_MODE_PIN, LOW);
   
 //     // set up chibi regs to turn off external P/A
 //     chibiRegWrite(0x4, 0x20);
 //   }
 //   else
 //   {
-//     digitalWrite(hgmPin, HIGH);
+//     digitalWrite(HIGH_GAIN_MODE_PIN, HIGH);
     
 //     // set up chibi regs to turn on external P/A
 //     chibiRegWrite(0x4, 0xA0);
@@ -190,13 +200,13 @@ void read_sensors(){
 // }
 
 void sleep_radio(){
-  digitalWrite(hgmPin, LOW);
+  digitalWrite(HIGH_GAIN_MODE_PIN, LOW);
     // set up chibi regs to turn off external P/A
     chibiRegWrite(0x4, 0x20);
 }
 
 void wakeup_radio(){
-  digitalWrite(hgmPin, HIGH);
+  digitalWrite(HIGH_GAIN_MODE_PIN, HIGH);
     // set up chibi regs to turn on external P/A
     chibiRegWrite(0x4, 0xA0);
 }
