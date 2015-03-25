@@ -42,7 +42,13 @@ set(${PROJECT_NAME}_BOARD saboten)
 set(${PROJECT_NAME}_SRCS ricefield.cpp)
 
 # Define the port for uploading code to the Arduino
-set(${PROJECT_NAME}_PORT /dev/tty.usbserial-A4011F64)
+set(${PROJECT_NAME}_PORT /dev/tty.usbserial-A501K9HW)
+
+# Surpress compile time warings
+add_definitions ("-w")
+
+# Enable output of all compile time warnings
+#add_definitions ("-Wall")
 
 # Command to generate code arduino firmware (.hex file)
 generate_arduino_firmware(${PROJECT_NAME})
