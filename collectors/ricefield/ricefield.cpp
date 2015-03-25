@@ -84,12 +84,11 @@ void setup()
 void loop()
 { 
 
-  board.sleep_mcu();
-  // sleepMCU();
-  board.wakeup_radio();
+  // board.sleep_mcu();
+  // board.wakeup_radio();
   read_sensors();
-  // delay(1000);
-  board.sleep_radio();
+  delay(1000);
+  // board.sleep_radio();
 }
 
 
@@ -123,9 +122,12 @@ void read_sensors(){
   }
 
   // Read battery voltage
-  float vbat = read_vbat();
-  Reading battery_voltage = {"vbat", vbat, millis()};
-  add_to_tx_buf((char*) tx_buf, &battery_voltage);
+  // float vbat = read_vbat();
+  // Reading battery_voltage = {"vbat", vbat, millis()};
+  // add_to_tx_buf((char*) tx_buf, &battery_voltage);
+
+  read_vbat_new(tx_buf);
+
 
   // Debug print
   Serial.println((char*) tx_buf);
@@ -141,49 +143,6 @@ void read_sensors(){
   Serial.println("Done transmitting...");
 }
 
-// void doStuff(){
-//   for(int i = 5; i > 0; i--){
-//     Serial.print("Going to sleep in ");
-//     Serial.println(i);
-//     delay(1000);
-//   }
-  
-  
-// }
-
-// void sleep_radio(bool val)
-// {
-  
-//   if (val)
-//   {
-//     digitalWrite(HIGH_GAIN_MODE_PIN, LOW);
-  
-//     // set up chibi regs to turn off external P/A
-//     chibiRegWrite(0x4, 0x20);
-//   }
-//   else
-//   {
-//     digitalWrite(HIGH_GAIN_MODE_PIN, HIGH);
-    
-//     // set up chibi regs to turn on external P/A
-//     chibiRegWrite(0x4, 0xA0);
-//   }
-  
-//   // turn on/off radio
-//   chibiSleepRadio(val);
-// }
-
-void sleep_radio(){
-  digitalWrite(HIGH_GAIN_MODE_PIN, LOW);
-    // set up chibi regs to turn off external P/A
-    chibiRegWrite(0x4, 0x20);
-}
-
-void wakeup_radio(){
-  digitalWrite(HIGH_GAIN_MODE_PIN, HIGH);
-    // set up chibi regs to turn on external P/A
-    chibiRegWrite(0x4, 0xA0);
-}
 
 float read_vbat(){
   float batt;
@@ -192,6 +151,19 @@ float read_vbat(){
   batt = ((vbat/1023.0) * ADCREFVOLTAGE) * 2;
   return batt;
 }
+
+void read_vbat_new(unsigned char *buffer){
+  // float batt;
+  unsigned int vbat = analogRead(VBAT_PIN);
+  double batt = ((vbat/1023.0) * ADCREFVOLTAGE) * 2;
+  Serial.print("BATT DOUBLE:");
+  Serial.println(batt);
+  Reading battery_voltage = {"vbat", batt, millis()};
+  Serial.print("READING:");
+  Serial.println(battery_voltage.value);
+  add_to_tx_buf_new(buffer, &battery_voltage);
+}
+
 
 //
 //

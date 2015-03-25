@@ -11,6 +11,7 @@ void read_temperature();
 void read_humidity();
 void read_sonar_distance();
 float read_vbat();
+void read_vbat_new(unsigned char *buffer);
 
 
 
