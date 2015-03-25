@@ -74,7 +74,7 @@ void setup()
   // pcf.enableSecondInterrupt();
   pcf.setInterruptToPulse();
 
-  attachInterrupt(2, rtcInterrupt, FALLING);
+  attachInterrupt(2, board.rtcInterrupt, FALLING);
 }
 
 /**************************************************************************/
@@ -83,41 +83,15 @@ void setup()
 
 void loop()
 { 
-  // for(int i = 0; i++; i<30){
-  //   sleepMCU();
-  // }
 
   board.sleep_mcu();
   // sleepMCU();
-  wakeup_radio();
+  board.wakeup_radio();
   read_sensors();
   // delay(1000);
-  sleep_radio();
+  board.sleep_radio();
 }
 
-
-void rtcInterrupt(){
-  detachInterrupt(2);
-}
-
-void sleepMCU()
-{
-  attachInterrupt(2, rtcInterrupt, FALLING);
-  delay(100);
-
-  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-  // sleep_radio(true);
-  sleep_enable();        // setting up for sleep ...
-  
-  // ADCSRA &= ~(1 << ADEN);    // Disable ADC
-  sleep_mode();
-
-  sleep_disable();
-  // ADCSRA |= ~(1 << ADEN);
-  // ADCSRA &= ~(0 << ADEN);    // Disable ADC
-  // sleep_radio(false);
-
-}
 
 void read_sensors(){
   Serial.println("Reading sensors...");
