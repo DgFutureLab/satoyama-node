@@ -6,6 +6,7 @@ Collects data from different sensors and sends it to
 #include "ricefield.h"
 #include <chibi.h>
 #include <saboten.h>
+#include <sensors.h>
 
 // satoyama-chibi-lib includes
 // Defines pin numbers for sensors and also a simple format to send
@@ -121,18 +122,16 @@ void read_sensors(){
     add_to_tx_buf((char*)tx_buf, &dist);
   }
 
-  // Read battery voltage
-  // float vbat = read_vbat();
-  // Reading battery_voltage = {"vbat", vbat, millis()};
-  // add_to_tx_buf((char*) tx_buf, &battery_voltage);
 
-  read_vbat_new(tx_buf);
+  read_vbat_lib(tx_buf, board.BATTERY_VOLTAGE_PIN, 3.3);
 
-
+  
   // Debug print
   Serial.println((char*) tx_buf);
 
   Serial.println("Transmitting data...");
+  
+
   //Send data stored on "tx_buf" to aggregator (Satoyama edge router)
   chibiTx(AGGREGATOR_SHORT_ADDRESS, tx_buf, TX_LENGTH);
   // chibiTx(20, tx_buf, TX_LENGTH);
