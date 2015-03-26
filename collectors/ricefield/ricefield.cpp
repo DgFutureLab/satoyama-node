@@ -123,7 +123,7 @@ void read_sensors(){
   }
 
 
-  read_vbat_lib(tx_buf, board.BATTERY_VOLTAGE_PIN, 3.3);
+  Sensors::read_battery_voltage(tx_buf, board.BATTERY_VOLTAGE_PIN, board.ADC_REFERENCE_VOLTAGE);
 
   
   // Debug print
