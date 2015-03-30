@@ -16,13 +16,16 @@ cmake_minimum_required(VERSION 2.8)
 
 # Set a variable for commands below
 set(PROJECT_NAME saboten_ricefield_node)
-
+add_definitions(-std=c++11) 
 link_directories(${SATOYAMA_LIBS}/chibiArduino-master/)
 link_directories(${SATOYAMA_LIBS}/SatoyamaChibiLib/)
 link_directories(${SATOYAMA_LIBS}/SdFat/)
 link_directories(${SATOYAMA_LIBS}/PCF2127/)
 link_directories(${SATOYAMA_LIBS}/Humidity_Temperature_Sensor/)
 link_directories(${SATOYAMA_LIBS}/NewPing/)
+link_directories(${SATOYAMA_LIBS}/StandardCplusplus/)
+
+
 
 # Define your project and language
 project(${PROJECT_NAME} C CXX)

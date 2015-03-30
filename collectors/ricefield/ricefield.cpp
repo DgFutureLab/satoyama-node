@@ -4,9 +4,12 @@ Collects data from different sensors and sends it to
  */
 
 #include "ricefield.h"
-#include <chibi.h>
 #include <saboten.h>
-#include <sensors.h>
+#include <chibi.h>
+
+
+// #include <sensors.h>
+
 
 // satoyama-chibi-lib includes
 // Defines pin numbers for sensors and also a simple format to send
@@ -31,7 +34,7 @@ dht DHT;
 
 //Sonnar library
 #include <NewPing.h>
-NewPing sonar(SONAR_PIN,SONAR_PIN,200);
+// NewPing sonar(SONAR_PIN,SONAR_PIN,200);
 
 
 int HIGH_GAIN_MODE_PIN = 14;
@@ -54,7 +57,8 @@ Saboten board;
 void setup()
 {
   // Initialize the chibi command line and set the speed to 57600 bps
-  
+  Paralax28015REVC_Sensor *sonar = new Paralax28015REVC_Sensor(6);  
+  board.register_sensor(sonar);  
   chibiCmdInit(57600);
   chibiInit();
 
@@ -87,6 +91,7 @@ void loop()
 
   // board.sleep_mcu();
   // board.wakeup_radio();
+  uint8_t tx_buffer[TX_LENGTH];  
   read_sensors();
   delay(1000);
   // board.sleep_radio();
@@ -94,42 +99,45 @@ void loop()
 
 
 void read_sensors(){
-  Serial.println("Reading sensors...");
+  // Serial.println("Reading sensors...");
 
   uint8_t tx_buf[TX_LENGTH];
   memset(tx_buf, 0, TX_LENGTH);
-  long duration, inches, cm;
+  // long duration, inches, cm;
 
-  // Read temperature
-  float temperature = DHT.temperature;  
-  if (temperature > 0) {
-    Reading temp = {"temperature", temperature, millis()};
-    add_to_tx_buf((char*)tx_buf, &temp);
-  }
+  // // Read temperature
+  // float temperature = DHT.temperature;  
+  // Serial.println(temperature);
+  // if (temperature > 0) {
+  //   Reading temp = {"temperature", temperature, millis()};
+  //   add_to_tx_buf((char*)tx_buf, &temp);
+  // }
 
-  // Read humidity
-  float humidity = DHT.humidity;
-  if (humidity > 0) {
-    Reading hum = {"humidity", humidity , millis()};
-    add_to_tx_buf((char*)tx_buf, &hum);
-  }
+  // // Read humidity
+  // float humidity = DHT.humidity;
+  // if (humidity > 0) {
+  //   Reading hum = {"humidity", humidity , millis()};
+  //   add_to_tx_buf((char*)tx_buf, &hum);
+  // }
 
-  // Read sonar distance
-  float distance = sonar.ping() / US_ROUNDTRIP_CM; 
+  // // Read sonar distance
+  // float distance = sonar.ping() / US_ROUNDTRIP_CM; 
   
-  if (distance > 0) {
-    Reading dist = {"distance", distance, millis()};
-    add_to_tx_buf((char*)tx_buf, &dist);
-  }
+  // if (distance > 0) {
+  //   Reading dist = {"distance", distance, millis()};
+  //   add_to_tx_buf((char*)tx_buf, &dist);
+  // }
 
-
-  Sensors::read_battery_voltage(tx_buf, board.BATTERY_VOLTAGE_PIN, board.ADC_REFERENCE_VOLTAGE);
+  // Sensors::read_Paralax28015REVC(tx_buf, 6, sonar);
+  // sonar2->read(tx_buf);
+  board.read_sensors(tx_buf);
+  // Sensors::read_battery_voltage(tx_buf, board.BATTERY_VOLTAGE_PIN, board.ADC_REFERENCE_VOLTAGE);
 
   
   // Debug print
   Serial.println((char*) tx_buf);
 
-  Serial.println("Transmitting data...");
+  // Serial.println("Transmitting data...");
   
 
   //Send data stored on "tx_buf" to aggregator (Satoyama edge router)

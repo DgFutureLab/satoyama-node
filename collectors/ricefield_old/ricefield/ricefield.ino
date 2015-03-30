@@ -87,7 +87,7 @@ void loop()
   chibiTx(AGGREGATOR_SHORT_ADDRESS, tx_buf, TX_LENGTH);
 
   //Wait
-  delay(TX_INTERVAL);
+  delay(1000);
   free(tx_buf);
 }
 
