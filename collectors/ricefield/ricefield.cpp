@@ -24,7 +24,7 @@ Collects data from different sensors and sends it to
 #include <Wire.h>
 #include <SPI.h>
 #include <SdFat.h>
-#include <pcf2127.h>
+// #include <pcf2127.h>
 
  //Temperature and humidity library
 #include "DHT.h"
@@ -37,16 +37,16 @@ dht DHT;
 // NewPing sonar(SONAR_PIN,SONAR_PIN,200);
 
 
-int HIGH_GAIN_MODE_PIN = 14;
-int SD_CHIPSELECT_PIN = 15;
-int RTC_CHIPSELECT_PIN = 28; 
-int LED_PIN = 18;
-int SD_DETECT_PIN = 19; 
-int vbatPin = 31;
-int vsolPin = 29;
+// int HIGH_GAIN_MODE_PIN = 14;
+// int SD_CHIPSELECT_PIN = 15;
+// int RTC_CHIPSELECT_PIN = 28; 
+// int LED_PIN = 18;
+// int SD_DETECT_PIN = 19; 
+// int vbatPin = 31;
+// int vsolPin = 29;
 
 uint8_t temp;
-PCF2127 pcf(0, 0, 0, RTC_CHIPSELECT_PIN, &temp);
+// PCF2127 pcf(0, 0, 0, RTC_CHIPSELECT_PIN, &temp);
 Saboten board;
 
 /**************************************************************************/
@@ -54,32 +54,34 @@ Saboten board;
 /**************************************************************************/
 //int interruptPin = 6;
 
+// int SONAR_PIN = 6;
+
 void setup()
 {
   // Initialize the chibi command line and set the speed to 57600 bps
-  Paralax28015REVC_Sensor *sonar = new Paralax28015REVC_Sensor(6);  
-  board.register_sensor(sonar);  
+  // Paralax28015REVC_Sensor *sonar =   
+  board.register_sensor(new Paralax28015REVC_Sensor(6));  
   chibiCmdInit(57600);
-  chibiInit();
+  // chibiInit();
 
-  // set up rtc chip select
-  pinMode(RTC_CHIPSELECT_PIN, OUTPUT);
-  digitalWrite(RTC_CHIPSELECT_PIN, HIGH);
+  // // set up rtc chip select
+  // pinMode(RTC_CHIPSELECT_PIN, OUTPUT);
+  // digitalWrite(RTC_CHIPSELECT_PIN, HIGH);
 
-  pinMode(SD_CHIPSELECT_PIN, INPUT);
-  digitalWrite(SD_CHIPSELECT_PIN, HIGH);
+  // pinMode(SD_CHIPSELECT_PIN, INPUT);
+  // digitalWrite(SD_CHIPSELECT_PIN, HIGH);
 
-  pinMode(SD_DETECT_PIN, INPUT);
-  digitalWrite(SD_DETECT_PIN, LOW);
+  // pinMode(SD_DETECT_PIN, INPUT);
+  // digitalWrite(SD_DETECT_PIN, LOW);
 
-  pinMode(HIGH_GAIN_MODE_PIN, OUTPUT);
-  digitalWrite(HIGH_GAIN_MODE_PIN, LOW);
+  // pinMode(HIGH_GAIN_MODE_PIN, OUTPUT);
+  // digitalWrite(HIGH_GAIN_MODE_PIN, LOW);
 
-  pcf.enableMinuteInterrupt();
-  // pcf.enableSecondInterrupt();
-  pcf.setInterruptToPulse();
+  // pcf.enableMinuteInterrupt();
+  // // pcf.enableSecondInterrupt();
+  // pcf.setInterruptToPulse();
 
-  attachInterrupt(2, board.rtcInterrupt, FALLING);
+  // attachInterrupt(2, board.rtcInterrupt, FALLING);
 }
 
 /**************************************************************************/
