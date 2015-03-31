@@ -47,7 +47,7 @@ dht DHT;
 
 uint8_t temp;
 // PCF2127 pcf(0, 0, 0, RTC_CHIPSELECT_PIN, &temp);
-Saboten board;
+Saboten *board = new Saboten(57600);
 
 /**************************************************************************/
 // Initialize
@@ -60,7 +60,7 @@ void setup()
 {
   // Initialize the chibi command line and set the speed to 57600 bps
   // Paralax28015REVC_Sensor *sonar =   
-  board.register_sensor(new Paralax28015REVC_Sensor(6));  
+  board->register_sensor(new Paralax28015REVC_Sensor(6));  
   chibiCmdInit(57600);
   // chibiInit();
 
@@ -132,7 +132,7 @@ void read_sensors(){
 
   // Sensors::read_Paralax28015REVC(tx_buf, 6, sonar);
   // sonar2->read(tx_buf);
-  board.read_sensors(tx_buf);
+  board->read_sensors(tx_buf);
   // Sensors::read_battery_voltage(tx_buf, board.BATTERY_VOLTAGE_PIN, board.ADC_REFERENCE_VOLTAGE);
 
   
