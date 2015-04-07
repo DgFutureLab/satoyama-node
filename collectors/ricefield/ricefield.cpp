@@ -4,6 +4,8 @@
 #include <saboten.h>
 #include <chibi.h>
 #include <satoyama_config.h>
+// #include <SPI.h>
+// #include <SD.h>
 
 Saboten *board = new Saboten(57600);
 
