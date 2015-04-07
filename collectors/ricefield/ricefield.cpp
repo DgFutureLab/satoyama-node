@@ -15,8 +15,6 @@ void setup()
 
 void loop()
 { 
-  delay(1000);
-  Serial.println("ADSASDASD");
   uint8_t tx_buf[TX_LENGTH];
   memset(tx_buf, 0, TX_LENGTH);
   board->read_sensors(tx_buf);
