@@ -11,4 +11,4 @@ void read_temperature();
 void read_humidity();
 void read_sonar_distance();
 
-
+void init_sdcard();
