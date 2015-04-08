@@ -37,6 +37,8 @@ void loop()
   // free(tx_buf);
   // Serial.println("Done transmitting...");
   // board->sleep_mcu();
+  writeData();
+  delay(1000);
 
 
 }
@@ -49,11 +51,9 @@ void init_sdcard(){
   // check for SD and init
   int sdDetect = digitalRead(sdDetectPin);
   Serial.println(sdDetect);
-  if (sdDetect == 0)
-  {
+  if (sdDetect == 0){
     // init the SD card
-    if (!sd.begin(sdCsPin)) 
-    {
+    if (!sd.begin(sdCsPin)){
       
       Serial.println("Card failed, or not present");
       sd.initErrorHalt();
@@ -61,11 +61,23 @@ void init_sdcard(){
     }
     Serial.println("SD Card is initialized.\n");
   }
-  else
-  {
+  else{
     Serial.println("No SD card detected.\n");
   }
 
+}
+
+
+void writeData()
+{    
+    if (!myFile.open("satoyama.txt", O_RDWR | O_CREAT | O_AT_END)){
+      myFile.println("HUM");
+      myFile.close();
+      Serial.println("Wrote data");
+    }
+    else{
+      printf("Error opening dataFile\n");
+    }
 }
 
 
