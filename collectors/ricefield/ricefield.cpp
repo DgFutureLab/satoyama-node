@@ -70,13 +70,20 @@ void init_sdcard(){
 
 void writeData()
 {    
-    if (!myFile.open("satoyama.txt", O_RDWR | O_CREAT | O_AT_END)){
-      myFile.println("HUM");
+    Serial.println("in write func");
+    int open_success = myFile.open("sa3.txt", O_RDWR | O_CREAT | O_AT_END);
+    Serial.print("Open file: ");
+    Serial.println(open_success);
+    if (open_success){
+      Serial.println("Writing data"); 
+      myFile.println("BLA");
+      // Serial.println("Wrote data");
       myFile.close();
-      Serial.println("Wrote data");
+       Serial.println("Closed file");
+     
     }
     else{
-      printf("Error opening dataFile\n");
+      Serial.println("Error opening dataFile");
     }
 }
 
