@@ -12,4 +12,4 @@ void read_humidity();
 void read_sonar_distance();
 
 void init_sdcard();
-void writeData();
+void writeData(unsigned char *buffer);
