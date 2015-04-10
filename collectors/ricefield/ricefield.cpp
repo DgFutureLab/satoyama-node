@@ -33,12 +33,18 @@ void loop()
 { 
   uint8_t tx_buf[TX_LENGTH];
   memset(tx_buf, 0, TX_LENGTH);
+  
   board->read_sensors(tx_buf);
-  read_battery_voltage(tx_buf, 31, 3.3);
+  board->read_board_diagnostics(tx_buf);
+  
   Serial.println((char*) tx_buf);
+  
   chibiTx(AGGREGATOR_SHORT_ADDRESS, tx_buf, TX_LENGTH);
+  
   writeData(tx_buf);
+  
   free(tx_buf);
+  
   Serial.println("Done transmitting...");
   // board->sleep_mcu();
   
