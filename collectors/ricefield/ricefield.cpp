@@ -10,6 +10,8 @@
 #include <SPI.h>
 #include <SdFat.h>
 
+#define FILENAME "sensordata.txt"
+
 SdFat sd;
 SdFile myFile;
 
@@ -72,7 +74,7 @@ void init_sdcard(){
 
 void writeData(unsigned char *buffer){    
     Serial.println("in write func");
-    int open_success = myFile.open("sa4.txt", O_RDWR | O_CREAT | O_AT_END);
+    int open_success = myFile.open(FILENAME, O_RDWR | O_CREAT | O_AT_END);
     Serial.print("Open file: ");
     Serial.println(open_success);
     if (open_success){
