@@ -56,24 +56,29 @@
 Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
 SPI_CLOCK_DIVIDER); // you can change this clock speed but DI
 
-//#define WLAN_SSID       "HWD15_F49FF3ED0D6D"        // cannot be longer than 32 characters!
-//#define WLAN_PASS       "10ii3ybg21f8317"
-//#define WLAN_SECURITY   WLAN_SEC_WPA
+#define WLAN_SSID       "HWD15_F49FF3ED0D6D"        // cannot be longer than 32 characters!
+#define WLAN_PASS       "10ii3ybg21f8317"
+#define WLAN_SECURITY   WLAN_SEC_WPA
 
-#define WLAN_SSID       "iPhone"        // cannot be longer than 32 characters!
-#define WLAN_PASS       "h9ax8ng0o0tv"
-// Security can be WLAN_SEC_UNSEC, WLAN_SEC_WEP, WLAN_SEC_WPA or WLAN_SEC_WPA2
-#define WLAN_SECURITY   WLAN_SEC_WPA2
+//#define WLAN_SSID       "iPhone"        // cannot be longer than 32 characters!
+//#define WLAN_PASS       "h9ax8ng0o0tv"
+//// Security can be WLAN_SEC_UNSEC, WLAN_SEC_WEP, WLAN_SEC_WPA or WLAN_SEC_WPA2
+//#define WLAN_SECURITY   WLAN_SEC_WPA2
 
 // Chibi Parameters
-uint8_t tx_buf[TX_LENGTH];
+//uint8_t tx_buf[TX_LENGTH];
 int src_addr;
 
 // JSON
-StaticJsonBuffer<200> jsonBuffer;
-char jbuffer[256];
+StaticJsonBuffer<150> jsonBuffer;
+char jbuffer[150];
 // JsonObject& root = jsonBuffer.createObject();
 JsonArray& data = jsonBuffer.createArray();
+JsonObject& jtemp = data.createNestedObject();
+JsonObject& jhumid = data.createNestedObject();  
+//JsonObject& jsonar = data.createNestedObject(); 
+//JsonObject& jbatt = data.createNestedObject();  
+
 
 // WiFi Parameters
 uint32_t ip;
@@ -82,7 +87,7 @@ uint32_t ip;
 //#define WEBSITE      "www.adafruit.com"
 //#define WEBPAGE      "/testwifi/index.html"
 #define WEBSITE "128.199.120.30"
-#define WEBPAGE "/nodes"
+#define WEBPAGE "/readings"
 
 #define IDLE_TIMEOUT_MS  5000
 
@@ -141,7 +146,7 @@ void setup(void)
   //#endif
 
   /* Delete any old connection data on the module */
-  Serial.println(F("\nDeleting old connection profiles"));
+  //  Serial.println(F("\nDeleting old connection profiles"));
   if (!cc3000.deleteProfiles()) {
     Serial.println(F("Failed!"));
     while(1);
@@ -185,7 +190,7 @@ void loop(void)
 
   /* Attempt to connect to an access point */
   char *ssid = WLAN_SSID;             /* Max 32 chars */
-  Serial.print(F("\nAttempting to connect to ")); 
+  //  Serial.print(F("\nAttempting to connect to ")); 
   Serial.println(ssid);
 
   /* NOTE: Secure connections are not available in 'Tiny' mode!
@@ -248,8 +253,8 @@ void loop(void)
   read_sensors();
   //  Serial.println((char*) tx_buf);
 
-  //  getData();
-  //  postData();
+  //    getData();
+  postData();
   //  getData();
 
   /* You need to make sure to clean up after yourself or the CC3000 can freak out */
@@ -258,8 +263,10 @@ void loop(void)
   cc3000.disconnect();
 
   // Clear buffer
-  free(tx_buf);
-  //  free(Jsonbuffer);
+  //  free(tx_buf);
+  free(jbuffer);
+  jbuffer[0] = (char)0;
+
 
   delay(10000);
 }
@@ -415,17 +422,17 @@ void read_sensors(){
   //Serial.println("Temp done");
   //long duration, inches, cm;
 
-//  char str[80];
-//  strcpy(str, "");  
-//  strcat(str, "^");
-//  strcat(str,"44");
-//  strcat(str, "@");
-//  strcat((char *)tx_buf, (char *)str);
+  //  char str[80];
+  //  strcpy(str, "");  
+  //  strcat(str, "^");
+  //  strcat(str,"44");
+  //  strcat(str, "@");
+  //  strcat((char *)tx_buf, (char *)str);
 
   //  // Read temperature
   //  float temperature = DHT.temperature;  
   //  if (temperature > 0) {
-  JsonObject& jtemp = data.createNestedObject();
+  //  JsonObject& jtemp = data.createNestedObject();
   float temperature = 25;  
   //  Reading temp = {
   //    "temperature", temperature, millis()          };
@@ -440,46 +447,46 @@ void read_sensors(){
   //  // Read humidity
   //  float humidity = DHT.humidity;
   //  if (humidity > 0) {
-  JsonObject& jhumid = data.createNestedObject();  
-  float humidity = 50;
-  //  Reading hum = {
-  //    "humidity", humidity , millis()          };
-  //  add_to_tx_buf_new(tx_buf, &hum);
-  jhumid["alias"] = "humidity";
-  jhumid["value"] = humidity;
-  jhumid["timestamp"] = millis();
-  Serial.println("Humid done");
+//    JsonObject& jhumid = data.createNestedObject();  
+//    float humidity = 50;
+//  //  //  Reading hum = {
+//  //  //    "humidity", humidity , millis()          };
+//  //  //  add_to_tx_buf_new(tx_buf, &hum);
+//    jhumid["alias"] = "humidity";
+//    jhumid["value"] = humidity;
+//    jhumid["timestamp"] = millis();
+//    Serial.println("Humid done");
   //  }
   //
   //  // Read sonar distance
   //  float distance = sonar.ping() / US_ROUNDTRIP_CM; 
   //  
   //  if (distance > 0) {
-  JsonObject& jsonar = data.createNestedObject();  
-  float distance = 30;
-  //  Reading dist = {
-  //    "distance", distance, millis()          };
-  //  add_to_tx_buf_new(tx_buf, &dist);
-  jsonar["alias"] = "distance";
-  jsonar["value"] = distance;
-  jsonar["timestamp"] = millis();
-  Serial.println("Sonar done");
-  //  }
-  //
-  //  // Read battery voltage
-  //  float vbat = read_vbat();
-  JsonObject& jbatt = data.createNestedObject();  
-  float vbat = 3.3;
-  //  Reading battery_voltage = {
-  //    "vbat", vbat, millis()          };
-  //  add_to_tx_buf_new(tx_buf, &battery_voltage);
-  jbatt["alias"] = "vbat";
-  jbatt["value"] = vbat;
-  jbatt["timestamp"] = millis();
-  Serial.println("Battery done");
+  //  JsonObject& jsonar = data.createNestedObject();  
+  //  float distance = 30;
+  //  //  Reading dist = {
+  //  //    "distance", distance, millis()          };
+  //  //  add_to_tx_buf_new(tx_buf, &dist);
+  //  jsonar["alias"] = "distance";
+  //  jsonar["value"] = distance;
+  //  jsonar["timestamp"] = millis();
+  //  Serial.println("Sonar done");
+  //  //  }
+  //  //
+  //  //  // Read battery voltage
+  //  //  float vbat = read_vbat();
+  //  JsonObject& jbatt = data.createNestedObject();  
+  //  float vbat = 3.3;
+  //  //  Reading battery_voltage = {
+  //  //    "vbat", vbat, millis()          };
+  //  //  add_to_tx_buf_new(tx_buf, &battery_voltage);
+  //  jbatt["alias"] = "vbat";
+  //  jbatt["value"] = vbat;
+  //  jbatt["timestamp"] = millis();
+  //  Serial.println("Battery done");
   // Debug print
 
-//    char jbuffer[256];
+  //    char jbuffer[256];
   data.printTo(jbuffer, sizeof(jbuffer));
 
   Serial.println(jbuffer);
@@ -523,7 +530,7 @@ void postData() {
   //  char data[TX_LENGTH];
   //  memcpy(data, tx_buf, TX_LENGTH); 
   Serial.print("Posting ");
-  Serial.println((char*) tx_buf);
+  //  Serial.println((char*) tx_buf);
 
   // If there's a successful connection, send the HTTP POST request
   if (client.connect(ip, 80)) {
@@ -543,19 +550,34 @@ void postData() {
     //    client.println(*tx_buf); 
 
     client.fastrprint(F("POST "));
+    //    Serial.println("POST");
     client.fastrprint(WEBPAGE);
+    //    Serial.println(WEBPAGE);
     client.fastrprint(F(" HTTP/1.1\r\n"));
+    //    Serial.println(" HTTP/1.1\r\n");
     client.fastrprint(F("Host: ")); 
+    //    Serial.println("Host: ");
     client.fastrprint(WEBSITE); 
+    //    Serial.println(WEBSITE);
     client.fastrprint(F("\r\n"));
+    //    Serial.println("\r\n");
     client.fastrprint(F("User-Agent: Arduino/1.0"));
+    //    Serial.println("User-Agent: Arduino/1.0");
     client.fastrprint(F("\r\n"));        
+    //    Serial.println("\r\n");
     client.fastrprint(F("Connection: close"));
+//    client.fastrprint(F("Content-Length: "));
+//    client.fastrprint(F("150"));
     //    client.fastrprint(F("Content-Type: application/x-www-form-urlencoded;"))
+    //    Serial.println("Connection: close");
     client.fastrprint(F("\r\n"));
-    client.println();
-    client.println((char*) tx_buf); 
-    //client.println(jbuffer);     
+    //    Serial.println("\r\n");
+    //    client.println();
+    //    client.println((char*) tx_buf); 
+    //    Serial.println();
+    client.println(jbuffer);  // !!! There seems to be a limit to the MAX length of the message !!!
+//            client.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");     
+    //    Serial.println((char *)jbuffer);
 
     client.println();
 
@@ -663,4 +685,5 @@ void getData() {
   client.close();
 
 }
+
 
