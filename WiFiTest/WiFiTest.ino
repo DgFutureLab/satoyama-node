@@ -27,13 +27,11 @@
  
  */
 
-#include <Adafruit_CC3000.h>
-#include <ccspi.h>
-#include <SPI.h>
-#include <string.h>
-#include "utility/debug.h"
-
-//#include <WiFi.h>
+ #include <Adafruit_CC3000.h>
+ #include <ccspi.h>
+ #include <SPI.h>
+ #include <string.h>
+ #include "utility/debug.h"
 
 // satoyama-chibi-lib includes
 // Defines pin numbers for sensors and also a simple format to send
@@ -46,15 +44,21 @@
 // JSON compression
 #include <ArduinoJson.h>
 
-// These are the interrupt and control pins
-#define ADAFRUIT_CC3000_IRQ   3  // MUST be an interrupt pin!
-// These can be any two pins
-#define ADAFRUIT_CC3000_VBAT  5
-#define ADAFRUIT_CC3000_CS    10
-// Use hardware SPI for the remaining pins
-// On an UNO, SCK = 13, MISO = 12, and MOSI = 11
-Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
-SPI_CLOCK_DIVIDER); // you can change this clock speed but DI
+//Temperature and humidity library
+#include "DHT.h"
+#define DHTTYPE DHT11   // Type of DHT sensor, in our case we are using DHT11
+#define DHT11_PIN A0    // Pin where the DHT11 is connected
+dht DHT;
+
+ // These are the interrupt and control pins
+ #define ADAFRUIT_CC3000_IRQ   3  // MUST be an interrupt pin!
+ // These can be any two pins
+ #define ADAFRUIT_CC3000_VBAT  5
+ #define ADAFRUIT_CC3000_CS    10
+ // Use hardware SPI for the remaining pins
+ // On an UNO, SCK = 13, MISO = 12, and MOSI = 11
+ Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
+ SPI_CLOCK_DIVIDER); // you can change this clock speed but DI
 
 #define WLAN_SSID       "HWD15_F49FF3ED0D6D"        // cannot be longer than 32 characters!
 #define WLAN_PASS       "10ii3ybg21f8317"
@@ -75,7 +79,7 @@ char jbuffer[150];
 // JsonObject& root = jsonBuffer.createObject();
 JsonArray& data = jsonBuffer.createArray();
 JsonObject& jtemp = data.createNestedObject();
-JsonObject& jhumid = data.createNestedObject();  
+//JsonObject& jhumid = data.createNestedObject();  
 //JsonObject& jsonar = data.createNestedObject(); 
 //JsonObject& jbatt = data.createNestedObject();  
 
@@ -253,9 +257,12 @@ void loop(void)
   read_sensors();
   //  Serial.println((char*) tx_buf);
 
-  //    getData();
-  postData();
-  //  getData();
+  //getIP(Adafruit_CC3000 cc3000, String WEBSITE, uint32_t ip);
+  // getIP(Adafruit_CC3000 cc3000, uint32_t A, uint32_t B, uint32_t C, uint32_t D, uint32_t ip);
+  ip = 0x80c7781e;
+  cc3000.postData(jbuffer, WEBSITE, WEBPAGE, ip, IDLE_TIMEOUT_MS);
+
+  cc3000.getData(WEBSITE, WEBPAGE, ip, IDLE_TIMEOUT_MS);
 
   /* You need to make sure to clean up after yourself or the CC3000 can freak out */
   /* the next time you try to connect ... */
@@ -323,97 +330,97 @@ uint16_t checkFirmwareVersion(void)
   return version;
 }
 
-/**************************************************************************/
-/*!
- @brief  Tries to read the 6-byte MAC address of the CC3000 module
- */
-/**************************************************************************/
-void displayMACAddress(void)
-{
-  uint8_t macAddress[6];
-
-  if(!cc3000.getMacAddress(macAddress))
-  {
-    Serial.println(F("Unable to retrieve MAC Address!\r\n"));
-  }
-  else
-  {
-    Serial.print(F("MAC Address : "));
-    cc3000.printHex((byte*)&macAddress, 6);
-  }
-}
-
-
-/**************************************************************************/
-/*!
- @brief  Tries to read the IP address and other connection details
- */
-/**************************************************************************/
-bool displayConnectionDetails(void)
-{
-  uint32_t ipAddress, netmask, gateway, dhcpserv, dnsserv;
-
-  if(!cc3000.getIPAddress(&ipAddress, &netmask, &gateway, &dhcpserv, &dnsserv))
-  {
-    Serial.println(F("Unable to retrieve the IP Address!\r\n"));
-    return false;
-  }
-  else
-  {
-    Serial.print(F("\nIP Addr: ")); 
-    cc3000.printIPdotsRev(ipAddress);
-    Serial.print(F("\nNetmask: ")); 
-    cc3000.printIPdotsRev(netmask);
-    Serial.print(F("\nGateway: ")); 
-    cc3000.printIPdotsRev(gateway);
-    Serial.print(F("\nDHCPsrv: ")); 
-    cc3000.printIPdotsRev(dhcpserv);
-    Serial.print(F("\nDNSserv: ")); 
-    cc3000.printIPdotsRev(dnsserv);
-    Serial.println();
-    return true;
-  }
-}
-
-/**************************************************************************/
-/*!
- @brief  Begins an SSID scan and prints out all the visible networks
- */
-/**************************************************************************/
-
-void listSSIDResults(void)
-{
-  uint32_t index;
-  uint8_t valid, rssi, sec;
-  char ssidname[33]; 
-
-  if (!cc3000.startSSIDscan(&index)) {
-    Serial.println(F("SSID scan failed!"));
-    return;
-  }
-
-  Serial.print(F("Networks found: ")); 
-  Serial.println(index);
-  Serial.println(F("================================================"));
-
-  while (index) {
-    index--;
-
-    valid = cc3000.getNextSSID(&rssi, &sec, ssidname);
-
-    Serial.print(F("SSID Name    : ")); 
-    Serial.print(ssidname);
-    Serial.println();
-    Serial.print(F("RSSI         : "));
-    Serial.println(rssi);
-    Serial.print(F("Security Mode: "));
-    Serial.println(sec);
-    Serial.println();
-  }
-  Serial.println(F("================================================"));
-
-  cc3000.stopSSIDscan();
-}
+///**************************************************************************/
+///*!
+// @brief  Tries to read the 6-byte MAC address of the CC3000 module
+// */
+///**************************************************************************/
+//void displayMACAddress(void)
+//{
+//  uint8_t macAddress[6];
+//
+//  if(!cc3000.getMacAddress(macAddress))
+//  {
+//    Serial.println(F("Unable to retrieve MAC Address!\r\n"));
+//  }
+//  else
+//  {
+//    Serial.print(F("MAC Address : "));
+//    cc3000.printHex((byte*)&macAddress, 6);
+//  }
+//}
+//
+//
+///**************************************************************************/
+///*!
+// @brief  Tries to read the IP address and other connection details
+// */
+///**************************************************************************/
+//bool displayConnectionDetails(void)
+//{
+//  uint32_t ipAddress, netmask, gateway, dhcpserv, dnsserv;
+//
+//  if(!cc3000.getIPAddress(&ipAddress, &netmask, &gateway, &dhcpserv, &dnsserv))
+//  {
+//    Serial.println(F("Unable to retrieve the IP Address!\r\n"));
+//    return false;
+//  }
+//  else
+//  {
+//    Serial.print(F("\nIP Addr: ")); 
+//    cc3000.printIPdotsRev(ipAddress);
+//    Serial.print(F("\nNetmask: ")); 
+//    cc3000.printIPdotsRev(netmask);
+//    Serial.print(F("\nGateway: ")); 
+//    cc3000.printIPdotsRev(gateway);
+//    Serial.print(F("\nDHCPsrv: ")); 
+//    cc3000.printIPdotsRev(dhcpserv);
+//    Serial.print(F("\nDNSserv: ")); 
+//    cc3000.printIPdotsRev(dnsserv);
+//    Serial.println();
+//    return true;
+//  }
+//}
+//
+///**************************************************************************/
+///*!
+// @brief  Begins an SSID scan and prints out all the visible networks
+// */
+///**************************************************************************/
+//
+//void listSSIDResults(void)
+//{
+//  uint32_t index;
+//  uint8_t valid, rssi, sec;
+//  char ssidname[33]; 
+//
+//  if (!cc3000.startSSIDscan(&index)) {
+//    Serial.println(F("SSID scan failed!"));
+//    return;
+//  }
+//
+//  Serial.print(F("Networks found: ")); 
+//  Serial.println(index);
+//  Serial.println(F("================================================"));
+//
+//  while (index) {
+//    index--;
+//
+//    valid = cc3000.getNextSSID(&rssi, &sec, ssidname);
+//
+//    Serial.print(F("SSID Name    : ")); 
+//    Serial.print(ssidname);
+//    Serial.println();
+//    Serial.print(F("RSSI         : "));
+//    Serial.println(rssi);
+//    Serial.print(F("Security Mode: "));
+//    Serial.println(sec);
+//    Serial.println();
+//  }
+//  Serial.println(F("================================================"));
+//
+//  cc3000.stopSSIDscan();
+//}
 
 void read_sensors(){
   Serial.println("Reading sensors...");
@@ -422,6 +429,8 @@ void read_sensors(){
   //Serial.println("Temp done");
   //long duration, inches, cm;
 
+  // Read sensor
+  DHT.read11(DHT11_PIN);
   //  char str[80];
   //  strcpy(str, "");  
   //  strcat(str, "^");
@@ -430,10 +439,10 @@ void read_sensors(){
   //  strcat((char *)tx_buf, (char *)str);
 
   //  // Read temperature
-  //  float temperature = DHT.temperature;  
+  float temperature = DHT.temperature;  
+  //  float temperature = 25;  
   //  if (temperature > 0) {
   //  JsonObject& jtemp = data.createNestedObject();
-  float temperature = 25;  
   //  Reading temp = {
   //    "temperature", temperature, millis()          };
   //  add_to_tx_buf_new(tx_buf, &temp);
@@ -499,191 +508,6 @@ void read_sensors(){
   // delay(TX_INTERVAL);
   //  free(tx_buf);
   //  Serial.println("Done transmitting...");
-}
-
-
-
-void postData() {
-  // Combine yourdatacolumn header (yourdata=) with the data recorded from your arduino
-  // (yourarduinodata) and package them into the String yourdata which is what will be
-  // sent in your POST request
-  //  yourdata = yourdatacolumn + yourarduinodata;
-
-  // Try looking up the website's IP address
-  //  ip = 0;
-  //  Serial.print(WEBSITE); 
-  //  Serial.print(F(" -> "));
-  //  while (ip == 0) {
-  //    if (! cc3000.getHostByName(WEBSITE, &ip)) {
-  //      Serial.println(F("Couldn't resolve!"));
-  //    }
-  //    delay(500);
-  //  }
-
-  ip = cc3000.IP2U32(128, 199, 120, 30);
-
-
-  cc3000.printIPdotsRev(ip);
-
-  Adafruit_CC3000_Client client = cc3000.connectTCP(ip, 80);
-
-  //  char data[TX_LENGTH];
-  //  memcpy(data, tx_buf, TX_LENGTH); 
-  Serial.print("Posting ");
-  //  Serial.println((char*) tx_buf);
-
-  // If there's a successful connection, send the HTTP POST request
-  if (client.connect(ip, 80)) {
-    Serial.println("connecting...");
-
-    // EDIT: The POST 'URL' to the location of your insert_mysql.php on your web-host
-    //    client.println("POST /insert_mysql.php HTTP/1.1");
-    //
-    //    // EDIT: 'Host' to match your domain
-    //    client.println("Host: satoyamacloud.com");
-    //    client.println("User-Agent: Arduino/1.0");
-    //    client.println("Connection: close");
-    //    client.println("Content-Type: application/x-www-form-urlencoded;");
-    //    //    client.print("Content-Length: ");
-    //    //    client.println(data.length());
-    //    client.println();
-    //    client.println(*tx_buf); 
-
-    client.fastrprint(F("POST "));
-    //    Serial.println("POST");
-    client.fastrprint(WEBPAGE);
-    //    Serial.println(WEBPAGE);
-    client.fastrprint(F(" HTTP/1.1\r\n"));
-    //    Serial.println(" HTTP/1.1\r\n");
-    client.fastrprint(F("Host: ")); 
-    //    Serial.println("Host: ");
-    client.fastrprint(WEBSITE); 
-    //    Serial.println(WEBSITE);
-    client.fastrprint(F("\r\n"));
-    //    Serial.println("\r\n");
-    client.fastrprint(F("User-Agent: Arduino/1.0"));
-    //    Serial.println("User-Agent: Arduino/1.0");
-    client.fastrprint(F("\r\n"));        
-    //    Serial.println("\r\n");
-    client.fastrprint(F("Connection: close"));
-//    client.fastrprint(F("Content-Length: "));
-//    client.fastrprint(F("150"));
-    //    client.fastrprint(F("Content-Type: application/x-www-form-urlencoded;"))
-    //    Serial.println("Connection: close");
-    client.fastrprint(F("\r\n"));
-    //    Serial.println("\r\n");
-    //    client.println();
-    //    client.println((char*) tx_buf); 
-    //    Serial.println();
-    client.println(jbuffer);  // !!! There seems to be a limit to the MAX length of the message !!!
-//            client.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");     
-    //    Serial.println((char *)jbuffer);
-
-    client.println();
-
-    Serial.println("Finished posting");
-
-    Serial.println(F("-------------------------------------"));
-
-    /* Read data until either the connection is closed, or the idle timeout is reached. */
-    unsigned long lastRead = millis();
-    while (client.connected() && (millis() - lastRead < IDLE_TIMEOUT_MS)) {
-      while (client.available()) {
-        char c = client.read();
-        Serial.print(c);
-        lastRead = millis();
-      }
-    }
-    client.close();
-
-  } 
-  else {
-    // If you couldn't make a connection:
-    Serial.println("Connection failed");
-    Serial.println("Disconnecting.");
-    client.stop();
-  }
-
-  Serial.println("Success");
-  client.close();
-
-}
-
-
-void getData() {
-  // Combine yourdatacolumn header (yourdata=) with the data recorded from your arduino
-  // (yourarduinodata) and package them into the String yourdata which is what will be
-  // sent in your POST request
-  //  yourdata = yourdatacolumn + yourarduinodata;
-
-  // Try looking up the website's IP address
-  //  ip = 0;
-  //  Serial.print(WEBSITE); 
-  //  Serial.print(F(" -> "));
-  //  while (ip == 0) {
-  //    if (! cc3000.getHostByName(WEBSITE, &ip)) {
-  //      Serial.println(F("Couldn't resolve!"));
-  //    }
-  //    delay(500);
-  //  }
-
-  ip = cc3000.IP2U32(128, 199, 120, 30);
-
-  cc3000.printIPdotsRev(ip);
-
-  Adafruit_CC3000_Client client = cc3000.connectTCP(ip, 80);
-
-  //  char data[TX_LENGTH];
-  //  memcpy(data, tx_buf, TX_LENGTH); 
-
-
-  //  // If there's a successful connection, send the HTTP POST request
-  //  if (client.connect(ip, 80)) {
-  //    Serial.println("connecting...");
-  //
-  //    // EDIT: The POST 'URL' to the location of your insert_mysql.php on your web-host
-  //    client.println("GET /node/44 HTTP/1.1");
-  //
-  //    // EDIT: 'Host' to match your domain
-  //    client.println("Host: satoyamacloud.com");
-  //    client.println("User-Agent: Arduino/1.0");
-  //  } 
-  //  else {
-  //    // If you couldn't make a connection:
-  //    Serial.println("Connection failed");
-  //    Serial.println("Disconnecting.");
-  //    client.stop();
-  //  }
-
-  if (client.connected()) {
-    client.fastrprint(F("GET "));
-    client.fastrprint(WEBPAGE);
-    client.fastrprint(F(" HTTP/1.1\r\n"));
-    client.fastrprint(F("Host: ")); 
-    client.fastrprint(WEBSITE); 
-    client.fastrprint(F("\r\n"));
-    client.fastrprint(F("\r\n"));
-    client.println();
-  } 
-  else {
-    Serial.println(F("Connection failed"));    
-    return;
-  }
-
-
-  Serial.println(F("-------------------------------------"));
-
-  /* Read data until either the connection is closed, or the idle timeout is reached. */
-  unsigned long lastRead = millis();
-  while (client.connected() && (millis() - lastRead < IDLE_TIMEOUT_MS)) {
-    while (client.available()) {
-      char c = client.read();
-      Serial.print(c);
-      lastRead = millis();
-    }
-  }
-  client.close();
-
 }
 
 
