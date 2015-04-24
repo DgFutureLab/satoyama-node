@@ -10,7 +10,7 @@
 #include <SPI.h>
 #include <SdFat.h>
 
-#define FILENAME "sensordata.txt"
+#define FILENAME "data.txt"
 
 SdFat sd;
 SdFile myFile;
@@ -22,7 +22,8 @@ int sdCsPin = 15;
 
 void setup()
 {
-  board->register_sensor(new Paralax28015REVC_Sensor(6));  
+  board->register_sensor(new Paralax28015REVC_Sensor(5));  
+  // board->register_sensor(new DHT_V12_Sensor(6));  
   chibiCmdInit(57600);
   init_sdcard();
   
@@ -40,16 +41,15 @@ void loop()
   Serial.println((char*) tx_buf);
   
   chibiTx(AGGREGATOR_SHORT_ADDRESS, tx_buf, TX_LENGTH);
-  
   writeData(tx_buf);
   
   free(tx_buf);
   
-  Serial.println("Done transmitting...");
-  // board->sleep_mcu();
-  
-  delay(1000);
-
+  Serial.println("Done transmitting.");
+  // delay(1000);
+  for(int i = 0; i < 1; i++){
+    board->sleep_mcu();  
+  }
 
 }
 
