@@ -38,18 +38,23 @@ void loop()
   board->read_sensors(tx_buf);
   board->read_board_diagnostics(tx_buf);
   
+  Serial.print("Data in buffer: ");
   Serial.println((char*) tx_buf);
   
-  chibiTx(AGGREGATOR_SHORT_ADDRESS, tx_buf, TX_LENGTH);
+  // chibiTx(AGGREGATOR_SHORT_ADDRESS, tx_buf, TX_LENGTH);
   writeData(tx_buf);
   
   free(tx_buf);
+  delay(10000);
   
-  Serial.println("Done transmitting.");
-  // delay(1000);
+  
   for(int i = 0; i < 1; i++){
-    board->sleep_mcu();  
+    Serial.println("Sleeping");
+    board->sleep_mcu();
+    Serial.println("Awake");
   }
+  // board->sleep_mcu();  
+  
 
 }
 
@@ -60,7 +65,7 @@ void init_sdcard(){
   // delay(1000);
   // check for SD and init
   int sdDetect = digitalRead(sdDetectPin);
-  Serial.println(sdDetect);
+  // Serial.println(sdDetect);
   if (sdDetect == 0){
     // init the SD card
     if (!sd.begin(sdCsPin)){
@@ -79,17 +84,16 @@ void init_sdcard(){
 
 
 void writeData(unsigned char *buffer){    
-    Serial.println("in write func");
     int open_success = myFile.open(FILENAME, O_RDWR | O_CREAT | O_AT_END);
-    Serial.print("Open file: ");
-    Serial.println(open_success);
+    // Serial.print("Open file: ");
+    // Serial.println(open_success);
     if (open_success){
       // std::string str(buffer);
       
       char data[100];
       strcpy(data, (char*) buffer);
-      Serial.println("Writing data: ");
-      Serial.println(data); 
+      Serial.println("Writing data to SD card ");
+      // Serial.println(data); 
       // int n = sizeof(buffer);
       // Serial.println(n);
 
