@@ -45,7 +45,7 @@ void loop()
   writeData(tx_buf);
   
   free(tx_buf);
-  delay(10000);
+  delay(1000);
   
   
   for(int i = 0; i < 1; i++){
