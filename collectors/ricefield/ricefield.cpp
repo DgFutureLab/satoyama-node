@@ -26,6 +26,11 @@ void setup()
   // board->register_sensor(new DHT_V12_Sensor(6));  
   chibiCmdInit(57600);
   init_sdcard();
+  board->set_datetime(15, 5, 1, 12, 53, 0);
+  char msg[100];
+  // memset(msg, 0, 100);
+  sprintf(msg, "Clock set to: %s", (char*)board->timestamp());
+  writeData((unsigned char*)msg);
   
 
 }
