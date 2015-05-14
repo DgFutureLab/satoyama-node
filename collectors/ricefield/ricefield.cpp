@@ -26,9 +26,9 @@ void setup()
   // board->register_sensor(new DHT_V12_Sensor(6));  
   chibiCmdInit(57600);
   init_sdcard();
-  board->set_datetime(15, 5, 1, 12, 53, 0);
+  board->set_datetime(15, 5, 1, 15, 20, 0);
   char msg[100];
-  // memset(msg, 0, 100);
+  memset(msg, 0, 100);
   sprintf(msg, "Clock set to: %s", (char*)board->timestamp());
   writeData((unsigned char*)msg);
   
@@ -53,10 +53,10 @@ void loop()
   delay(1000);
   
   
-  for(int i = 0; i < 1; i++){
-    Serial.println("Sleeping");
+  for(int i = 0; i < 60; i++){
+    // Serial.println("Sleeping");
     board->sleep_mcu();
-    Serial.println("Awake");
+    // Serial.println("Awake");
   }
   // board->sleep_mcu();  
   
