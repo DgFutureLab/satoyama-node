@@ -22,7 +22,7 @@ int sdCsPin = 15;
 
 void setup()
 {
-  board->register_sensor(new Paralax28015REVC_Sensor(5));  
+  // board->register_sensor(new Paralax28015REVC_Sensor(5));  
   // board->register_sensor(new DHT_V12_Sensor(6));  
   chibiCmdInit(57600);
   init_sdcard();
