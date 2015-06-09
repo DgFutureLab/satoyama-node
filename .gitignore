@@ -3,3 +3,6 @@ abuild/
 *.swp
 **/build/
 .DS_Store
+*.log
+*.net
+*.raw
