@@ -139,32 +139,8 @@ void setup(void)
     Serial.println(i);
     Adafruit_CC3000_Client www = cc3000.connectTCP(ip, 80);
     if (www.connected()) {
-  //    Serial.println("1");
-  //    www.fastrprint(F("GET "));
-  //    Serial.println("A");
-  //    www.fastrprint(WEBPAGE);
-  //    Serial.println("B");
-  //    www.fastrprint(F(" HTTP/1.1\r\n"));
-  //    Serial.println("C");
-  //    www.fastrprint(F("Host: ")); www.fastrprint(WEBSITE); www.fastrprint(F("\r\n"));
-  //    Serial.println("D");
-  //    www.fastrprint(F("\r\n"));
-  //    Serial.println("E");
-  //    www.println();
-  //    Serial.println("F");
-  
-  //    www.fastrprint(F("POST "));
-  //    www.fastrprint(WEBPAGE);
-  //    www.fastrprint(F(" HTTP/1.1\r\n"));
-  //    www.fastrprint(F("Host: ")); www.fastrprint(WEBSITE); www.fastrprint(F("\r\n"));
-  //    www.fastrprint(F("\r\n"));
-  //    www.fastrprint(F("sensor_id=1&value=42.5"));
-  //    char[] request = "POST /reading HTTP/1.1\r\nHost: satoyamacloud.com\r\nContent-Length: 21\r\nAccept-Encoding: gzip, deflate\r\nAccept: */*\r\nUser-Agent: python-requests/2.4.3 CPython/2.7.5 Darwin/13.2.0\r\nConnection: keep-alive\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nsensor_id=1&value=2.5";
-  
         www.fastrprint(F("POST /reading HTTP/1.1\r\nHost: satoyamacloud.com\r\nContent-Length: 21\r\nAccept: */*\r\nConnection: keep-alive\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nsensor_id=2&value=28"));
         www.println();
-      
-  
     } else {
       Serial.println(F("Connection failed"));    
       return;
