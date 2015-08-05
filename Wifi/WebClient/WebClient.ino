@@ -1,3 +1,5 @@
+#include <ArduinoJson.h>
+
 /*************************************************** 
   This is an example for the Adafruit CC3000 Wifi Breakout & Shield
 
@@ -41,12 +43,12 @@ It might not work on all networks!
 Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
                                          SPI_CLOCK_DIVIDER); // you can change this clock speed
 
-#define WLAN_SSID       "HWD15_F49FF3ED0D6D"           // cannot be longer than 32 characters!
-#define WLAN_PASS       "10ii3ybg21f8317"
+//#define WLAN_SSID       "HWD15_F49FF3ED0D6D"           // cannot be longer than 32 characters!
+//#define WLAN_PASS       "10ii3ybg21f8317"
 //#define WLAN_SSID       "FutureLab"           // cannot be longer than 32 characters!
 //#define WLAN_PASS       "tacobeya11"
-//#define WLAN_SSID       "AirPort25512"           // cannot be longer than 32 characters!
-//#define WLAN_PASS       "1739818891249"
+#define WLAN_SSID       "AirPort25512"           // cannot be longer than 32 characters!
+#define WLAN_PASS       "1739818891249"
 // Security can be WLAN_SEC_UNSEC, WLAN_SEC_WEP, WLAN_SEC_WPA or WLAN_SEC_WPA2
 #define WLAN_SECURITY   WLAN_SEC_WPA2
 
@@ -134,37 +136,58 @@ void setup(void)
      Note: HTTP/1.1 protocol is used to keep the server from closing the connection before all data is read.
   */
 //  Serial.print("Starting web client");
-  for(int i = 0; i<10; i++){
-    Serial.print("request number ");
-    Serial.println(i);
-    Adafruit_CC3000_Client www = cc3000.connectTCP(ip, 80);
-    if (www.connected()) {
-        www.fastrprint(F("POST /reading HTTP/1.1\r\nHost: satoyamacloud.com\r\nContent-Length: 21\r\nAccept: */*\r\nConnection: keep-alive\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nsensor_id=2&value=28"));
-        www.println();
-    } else {
-      Serial.println(F("Connection failed"));    
-      return;
+  
+    DynamicJsonBuffer jsonBuffer;
+    JsonArray& root = jsonBuffer.createArray();
+    for(int i = 0; i<2; i++){
+      JsonObject& reading = root.createNestedObject();
+      reading["sensor_id"] = i;
+      reading["value"].set(5.534, 3);
+      reading["timestamp"] = "2015-8-5 10:46";
+//      int s = reading.size();
+  //  int s = root.size();
+//      Serial.println("ASDASD");
+//      int total_size = 2 + 14 + sizeof(reading["sensor_id"]) + 11 + sizeof(reading["value"]) + 15 + sizeof(reading["timestamp"]);
+//      Serial.println(sizeof(reading["timestamp"]));
     }
 
-  Serial.println(F("-------------------------------------"));
+  int data_length = root.printTo(Serial) + 5; 
+  char buf[10];
+  Serial.println("Data length");
+  Serial.println(buf);
+  itoa(data_length, buf, 10);
+  Adafruit_CC3000_Client www = cc3000.connectTCP(ip, 80);
   
-  /* Read data until either the connection is closed, or the idle timeout is reached. */ 
-  unsigned long lastRead = millis();
-  while (www.connected() && (millis() - lastRead < IDLE_TIMEOUT_MS)) {
-    while (www.available()) {
-      char c = www.read();
-      Serial.print(c);
-      lastRead = millis();
-    }
+  if (www.connected()) {
+//      www.fastrprint(F("POST /reading HTTP/1.1\r\nHost: satoyamacloud.com\r\nContent-Length: 21\r\nAccept: */*\r\nConnection: keep-alive\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nsensor_id=2&value=28"));
+      www.fastrprint(F("POST /readings HTTP/1.1\r\nHost: satoyamacloud.com\r\nContent-Length: "));
+      www.fastrprint(buf);
+      www.fastrprint(F("\r\nAccept: */*\r\nConnection: close\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\ndata="));
+      root.printTo(www);  
+      www.println();
+  } else {
+    Serial.println(F("Connection failed"));    
+    return;
   }
-  www.close();
-    }
-  Serial.println(F("-------------------------------------"));
-  
-  /* You need to make sure to clean up after yourself or the CC3000 can freak out */
-  /* the next time your try to connect ... */
-  Serial.println(F("\n\nDisconnecting"));
-  cc3000.disconnect();
+
+Serial.println(F("-------------------------------------"));
+
+/* Read data until either the connection is closed, or the idle timeout is reached. */ 
+unsigned long lastRead = millis();
+while (www.connected() && (millis() - lastRead < IDLE_TIMEOUT_MS)) {
+  while (www.available()) {
+    char c = www.read();
+    Serial.print(c);
+    lastRead = millis();
+  }
+}
+www.close();
+Serial.println(F("-------------------------------------"));
+
+/* You need to make sure to clean up after yourself or the CC3000 can freak out */
+/* the next time your try to connect ... */
+Serial.println(F("\n\nDisconnecting"));
+cc3000.disconnect();
   
 }
 
