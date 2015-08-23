@@ -35,6 +35,8 @@ dht11 DHT;
 #define NODE_ID 2
 #define EDGE_ID 1
 
+#define UPDATE_INTERVAL_MSEC 30000
+
 //Sonnar library
 #include <NewPing.h>
 NewPing sonar(6,6,200);
@@ -45,18 +47,11 @@ NewPing sonar(6,6,200);
 char node_key[10];
 void setup()
 {
-  // Initialize the chibi command line and set the speed to 57600 bps
-//  chibiCmdInit(115200);
-//  chibiSetShortAddr(2);
-  // Initialize the chibi wireless stack
   Serial.begin(115200);
-
-  sprintf(node_key, "%d", NODE_ID);
-  strcat(node_key, "@");
-  Serial.println(node_key);
   chibiInit();
-  pinMode(VBAT_PIN, INPUT);
-  Serial.println("Type,\tstatus,\tHumidity (%),\tTemperature (C)");
+  chibiSetShortAddr(NODE_ID);
+  sprintf(node_key, "%d", chibiGetShortAddr());
+  strcat(node_key, "@");
 }
 
 /**************************************************************************/
@@ -75,8 +70,8 @@ void loop()
   byte tx_buf[TX_LENGTH];
   memset(tx_buf, 0, TX_LENGTH);
   long duration, inches, cm;
-  
-  printf((char*)tx_buf, node_key);
+  strcat((char*) tx_buf, node_key);
+//  printf((char*)tx_buf, node_key);
 
   // Read temperature
 //  float temperature = DHT.temperature;
@@ -91,7 +86,7 @@ void loop()
   chibiTx(EDGE_ID, tx_buf, TX_LENGTH);
 
   //Wait
-  delay(1000);
+  delay(UPDATE_INTERVAL_MSEC);
   free(tx_buf);
 }
 
