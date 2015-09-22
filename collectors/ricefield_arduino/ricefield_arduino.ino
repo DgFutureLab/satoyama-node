@@ -8,7 +8,6 @@ the aggregator as defined in "config.h"
 // satoyama-chibi-lib includes
 // Defines pin numbers for sensors and also a simple format to send
 // information to the satoyama edge router
-#include <config.h>
 #include <utilsawesome.h>
 #include "DHT.h"
 #include <string.h>
@@ -21,21 +20,27 @@ the aggregator as defined in "config.h"
 #include <SdFat.h>
 #include <pcf2127.h>
 
+#define TX_LENGTH 100
+#define VBAT_PIN 31
+#define ADCREFVOLTAGE 3.3
+
 //Temperature and humidity library
 
 #include "dht11.h"
 dht11 DHT;
 #define DHT11_PIN 4
 
-#define TEMPERATURE_SENSOR_ID "4"
-#define HUMIDITY_SENSOR_ID "5"
-#define SONAR_SENSOR_ID "3"
-#define VBAT_SENSOR_ID "2"
+#define UPDATE_INTERVAL_MSEC 5000
+
+#define TEMPERATURE_SENSOR_ID 4
+#define HUMIDITY_SENSOR_ID 5
+#define SONAR_SENSOR_ID 3
+#define VBAT_SENSOR_ID 2
 
 #define NODE_ID 2
 #define EDGE_ID 1
 
-#define UPDATE_INTERVAL_MSEC 30000
+
 
 //Sonnar library
 #include <NewPing.h>
@@ -95,16 +100,16 @@ void loop()
 void read_sonar(char *tx_buf){
   float distance = sonar.ping() / US_ROUNDTRIP_CM; 
   if (distance > 0) {
-    Reading dist = {SONAR_SENSOR_ID, distance, millis()};
-    add_to_tx_buf((char*)tx_buf, &dist);
+    Reading dist = {NODE_ID, SONAR_SENSOR_ID, distance, millis()};
+    append_reading((char*)tx_buf, &dist);
   }
 }
 
 void read_vbat(char *tx_buf){
   unsigned int vbat_int = analogRead(VBAT_PIN);
   float vbat = ((vbat_int/1023.0) * ADCREFVOLTAGE) * 2;
-  Reading battery_voltage = {VBAT_SENSOR_ID, vbat, millis()};
-  add_to_tx_buf((char*) tx_buf, &battery_voltage);
+  Reading battery_voltage = {NODE_ID, VBAT_SENSOR_ID, vbat, millis()};
+  append_reading((char*) tx_buf, &battery_voltage);
 }
 
 
@@ -127,10 +132,10 @@ void read_dht(char* buf){
                 break;
   }
  // DISPLAT DATA
-  Reading temp = {TEMPERATURE_SENSOR_ID, DHT.temperature, millis()};
-  add_to_tx_buf((char*) buf, &temp);
-  Reading humidity = {HUMIDITY_SENSOR_ID, DHT.humidity, millis()};
-  add_to_tx_buf((char*) buf, &humidity);
+  Reading temp = {NODE_ID, TEMPERATURE_SENSOR_ID, DHT.temperature, millis()};
+  append_reading((char*) buf, &temp);
+  Reading humidity = {NODE_ID, HUMIDITY_SENSOR_ID, DHT.humidity, millis()};
+  append_reading((char*) buf, &humidity);
 
 }
 
