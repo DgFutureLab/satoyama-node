@@ -20,7 +20,7 @@ the aggregator as defined in "config.h"
 #include <SdFat.h>
 #include <pcf2127.h>
 
-#define TX_LENGTH 100
+#define TX_LENGTH 198
 #define VBAT_PIN 31
 #define ADCREFVOLTAGE 3.3
 
@@ -53,10 +53,10 @@ char node_key[10];
 void setup()
 {
   Serial.begin(115200);
+  Serial.println("START");
+  delay(1000);
   chibiInit();
   chibiSetShortAddr(NODE_ID);
-  sprintf(node_key, "%d", chibiGetShortAddr());
-  strcat(node_key, "@");
 }
 
 /**************************************************************************/
@@ -75,13 +75,12 @@ void loop()
   byte tx_buf[TX_LENGTH];
   memset(tx_buf, 0, TX_LENGTH);
   long duration, inches, cm;
-  strcat((char*) tx_buf, node_key);
 //  printf((char*)tx_buf, node_key);
 
   // Read temperature
 //  float temperature = DHT.temperature;
 //  Serial.println(temperature);  
-
+  Serial.println("ASDASD");
   read_dht((char*)tx_buf);
   read_vbat((char*) tx_buf);
   read_sonar((char*) tx_buf);
@@ -91,7 +90,7 @@ void loop()
   chibiTx(EDGE_ID, tx_buf, TX_LENGTH);
 
   //Wait
-  delay(UPDATE_INTERVAL_MSEC);
+  delay(5000);
   free(tx_buf);
 }
 
@@ -109,7 +108,7 @@ void read_vbat(char *tx_buf){
   unsigned int vbat_int = analogRead(VBAT_PIN);
   float vbat = ((vbat_int/1023.0) * ADCREFVOLTAGE) * 2;
   Reading battery_voltage = {NODE_ID, VBAT_SENSOR_ID, vbat, millis()};
-  append_reading((char*) tx_buf, &battery_voltage);
+  append_reading((char*) tx_buf, &          battery_voltage);
 }
 
 
@@ -133,7 +132,12 @@ void read_dht(char* buf){
   }
  // DISPLAT DATA
   Reading temp = {NODE_ID, TEMPERATURE_SENSOR_ID, DHT.temperature, millis()};
+
   append_reading((char*) buf, &temp);
+ 
+  Serial.println(DHT.temperature);
+  Serial.println(temp.value);
+  Serial.println(buf);
   Reading humidity = {NODE_ID, HUMIDITY_SENSOR_ID, DHT.humidity, millis()};
   append_reading((char*) buf, &humidity);
 
