@@ -63,38 +63,24 @@ void setup()
 // Loop
 /**************************************************************************/
 
-
-//char str[80];
-//printf(str, "Value of Pi = %f", 2);
-
-//char data_len_str[15];
-//sprintf(data_len_str, "%d", 10);
-
 void loop()
 {
   byte tx_buf[TX_LENGTH];
   memset(tx_buf, 0, TX_LENGTH);
   long duration, inches, cm;
-//  printf((char*)tx_buf, node_key);
 
   // Read temperature
-//  float temperature = DHT.temperature;
-//  Serial.println(temperature);  
-  Serial.println("ASDASD");
   read_dht((char*)tx_buf);
   read_vbat((char*) tx_buf);
   read_sonar((char*) tx_buf);
-  // Read sonar distance
 
   Serial.println((char*) tx_buf);
   chibiTx(EDGE_ID, tx_buf, TX_LENGTH);
 
   //Wait
-  delay(5000);
+  delay(UPDATE_INTERVAL_MSEC);
   free(tx_buf);
 }
-
-//void read_sonar(cha)
 
 void read_sonar(char *tx_buf){
   float distance = sonar.ping() / US_ROUNDTRIP_CM; 
@@ -108,7 +94,7 @@ void read_vbat(char *tx_buf){
   unsigned int vbat_int = analogRead(VBAT_PIN);
   float vbat = ((vbat_int/1023.0) * ADCREFVOLTAGE) * 2;
   Reading battery_voltage = {NODE_ID, VBAT_SENSOR_ID, vbat, millis()};
-  append_reading((char*) tx_buf, &          battery_voltage);
+  append_reading((char*) tx_buf, &battery_voltage);
 }
 
 
@@ -132,12 +118,8 @@ void read_dht(char* buf){
   }
  // DISPLAT DATA
   Reading temp = {NODE_ID, TEMPERATURE_SENSOR_ID, DHT.temperature, millis()};
-
   append_reading((char*) buf, &temp);
- 
-  Serial.println(DHT.temperature);
-  Serial.println(temp.value);
-  Serial.println(buf);
+
   Reading humidity = {NODE_ID, HUMIDITY_SENSOR_ID, DHT.humidity, millis()};
   append_reading((char*) buf, &humidity);
 
