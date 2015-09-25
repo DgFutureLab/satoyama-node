@@ -5,6 +5,8 @@ int old_distance;
 int new_distance;
 int change;
 const int tolerance = 30;
+const int ping_delay_msec = 2000;
+const int dist_n_avr = 10;
 boolean occupied;
 
 void setup() {
@@ -17,36 +19,30 @@ void setup() {
 
 void loop() {
   new_distance = measure_distance();
-  Serial.print("Before: ");
-  Serial.println(new_distance);
-  delay(2000);
+  delay(ping_delay_msec);
   old_distance = new_distance;
   new_distance = measure_distance();
-  Serial.print("After: ");
-  Serial.println(new_distance);
   change = new_distance - old_distance;
-  Serial.print("Change: ");
-  Serial.println(change);    
   if (abs(change) > tolerance){
     if(change > 0){
       occupied = 0;
-      Serial.print("Unoccupied");
+      Serial.println("Unoccupied");
     } else{
       occupied = 1;
-      Serial.print("Occupied");
+      Serial.println("Occupied");
     }
+    send_toilet_status(occupied);
   }
-  Serial.println("");
-  Serial.println("");
-  
 }
 
+void send_toilet_status(boolean occupied){
 
+}
 
 int measure_distance(){
   long duration, distance;
   distance = 0;
-  for(int i = 0; i<10; i++){
+  for(int i = 0; i<dist_n_avr; i++){
     digitalWrite(trigPin, LOW);  // Added this line
     delayMicroseconds(2); // Added this line
     digitalWrite(trigPin, HIGH);
@@ -56,7 +52,6 @@ int measure_distance(){
     duration = pulseIn(echoPin, HIGH);
     distance += (duration/2) / 29.1;
   }
-  distance /= 10;
-  Serial.println(distance);
+  distance /= dist_n_avr;
   return distance;
 }
