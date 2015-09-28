@@ -7,9 +7,10 @@
 
 #define trigPin 13
 #define echoPin 12
-int old_distance;
-int new_distance;
+int old_distance = 0;
+int new_distance = 0;
 int change;
+int toilet_occupied;
 const int tolerance = 30;
 const int ping_delay_msec = 2000;
 const int dist_n_avr = 10;
@@ -32,22 +33,50 @@ int len;
 
 
 
+#include <TimerOne.h>
+
+
+
+//void get_toilet_status(){
+////  Serial.println("A");
+//    new_distance = measure_distance();
+//  delay(ping_delay_msec);
+//  old_distance = new_distance;
+//  new_distance = measure_distance();
+//  change = new_distance - old_distance;
+//
+//  if (abs(change) > tolerance){
+//    if(change > 0){
+//      occupied = 0;
+//      Serial.println("Unoccupied");
+//    } else{
+//      occupied = 1;
+//      Serial.println("Occupied");
+//    }
+//    send_toilet_status(occupied);
+//  }
+//  
+//}
+
+void interrupt(){
+  old_distance = new_distance;
+  new_distance = measure_distance();
+}
+
+
 void setup() {
-  Serial.begin (9600);
+  Serial.begin(115200);
   Serial.println("BEGIN");
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
   init_3G_connection();
+  Timer1.initialize(5000000);
+  Timer1.attachInterrupt(interrupt);
 }
 
 
 void loop() {
-  new_distance = measure_distance();
-  delay(ping_delay_msec);
-  old_distance = new_distance;
-  new_distance = measure_distance();
   change = new_distance - old_distance;
-
   if (abs(change) > tolerance){
     if(change > 0){
       occupied = 0;
@@ -72,10 +101,8 @@ void send_toilet_status(boolean occupied){
   }
  
  if (a3gs.httpGET(server, port, path, res, len) == 0) {
-      Serial.println("OK!");
-      Serial.print("[");
-      Serial.print(res);
-      Serial.println("]");
+     Serial.println("HTTP OK"); 
+     Serial.println(res);
     }
     else {
       Serial.print("Can't get HTTP response from ");
