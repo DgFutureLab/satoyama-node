@@ -1,0 +1,52 @@
+
+
+   ---- Transcoding 'E:\Jobs\Temp files\sonar\Regulator\MCP Regulator\Regulator\Gerbers\Regulator.GBS' ----   Mon Sep 21 23:30:57 2015
+
+D10   --> D100
+D11   --> D101
+D13   --> D102
+D14   --> D103
+D15   --> D104
+-----------------------------------------------------------------
+
+
+   ---- Transcoding 'E:\Jobs\Temp files\sonar\Regulator\MCP Regulator\Regulator\Gerbers\Regulator.GTL' ----   Mon Sep 21 23:30:57 2015
+
+D10   --> D105
+D11   --> D106
+D12   --> D107
+D13   --> D108
+D14   --> D109
+D15   --> D110
+D16   --> D111
+D17   --> D112
+D18   --> D113
+-----------------------------------------------------------------
+
+
+   ---- Transcoding 'E:\Jobs\Temp files\sonar\Regulator\MCP Regulator\Regulator\Gerbers\Regulator.GTO' ----   Mon Sep 21 23:30:57 2015
+
+D10   --> D114
+D11   --> D115
+D12   --> D116
+D13   --> D117
+D14   --> D118
+D15   --> D119
+D16   --> D120
+-----------------------------------------------------------------
+
+
+   ---- Transcoding 'E:\Jobs\Temp files\sonar\Regulator\MCP Regulator\Regulator\Gerbers\Regulator.GTS' ----   Mon Sep 21 23:30:57 2015
+
+D10   --> D121
+D11   --> D122
+D12   --> D123
+D13   --> D124
+D14   --> D125
+D15   --> D126
+D16   --> D127
+D17   --> D128
+D18   --> D129
+D19   --> D130
+D20   --> D131
+-----------------------------------------------------------------
