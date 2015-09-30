@@ -10449,11 +10449,7 @@ type 0309, grid 2.5 mm</description>
 <wire x1="7.62" y1="2.54" x2="5.08" y2="2.54" width="0.1524" layer="91"/>
 <label x="-2.54" y="2.54" size="1.778" layer="95" rot="R180" xref="yes"/>
 <junction x="7.62" y="2.54"/>
-<wire x1="-2.54" y1="2.54" x2="0" y2="2.54" width="0.1524" layer="91"/>
-<pinref part="R4" gate="G$1" pin="2"/>
-<wire x1="0" y1="2.54" x2="7.62" y2="2.54" width="0.1524" layer="91"/>
-<wire x1="0" y1="-7.62" x2="0" y2="2.54" width="0.1524" layer="91"/>
-<junction x="0" y="2.54"/>
+<wire x1="-2.54" y1="2.54" x2="7.62" y2="2.54" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="C4" gate="G$1" pin="+"/>
@@ -10492,9 +10488,6 @@ type 0309, grid 2.5 mm</description>
 </net>
 <net name="N$5" class="0">
 <segment>
-<wire x1="5.08" y1="-20.32" x2="5.08" y2="7.62" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="-1" pin="VIN-"/>
-<wire x1="5.08" y1="7.62" x2="7.62" y2="7.62" width="0.1524" layer="91"/>
 <pinref part="R4" gate="G$1" pin="1"/>
 <wire x1="5.08" y1="-20.32" x2="0" y2="-20.32" width="0.1524" layer="91"/>
 <wire x1="0" y1="-20.32" x2="0" y2="-17.78" width="0.1524" layer="91"/>
@@ -10512,6 +10505,12 @@ type 0309, grid 2.5 mm</description>
 <pinref part="R3" gate="G$1" pin="2"/>
 <pinref part="R2" gate="G$1" pin="1"/>
 <wire x1="48.26" y1="-30.48" x2="48.26" y2="-25.4" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$8" class="0">
+<segment>
+<pinref part="IC2" gate="-1" pin="VIN-"/>
+<wire x1="5.08" y1="7.62" x2="7.62" y2="7.62" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

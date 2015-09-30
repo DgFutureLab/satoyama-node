@@ -11794,14 +11794,14 @@ Distributor Buerklin, 11G810</description>
 <part name="SV1" library="con-lstb" deviceset="MA03-1" device=""/>
 <part name="GND9" library="supply1" deviceset="GND" device=""/>
 <part name="IC3" library="adafruit" deviceset="MCP73831" device="/OT"/>
-<part name="R5" library="adafruit" deviceset="R-US_" device="M3216"/>
-<part name="LED1" library="adafruit" deviceset="LED" device="CHIP-LED0603"/>
-<part name="G1" library="battery" deviceset="CR-AA" device=""/>
+<part name="R5" library="adafruit" deviceset="R-US_" device="M3216" value="3.3k"/>
+<part name="CHARGED" library="adafruit" deviceset="LED" device="CHIP-LED0603"/>
+<part name="LI-ION" library="battery" deviceset="CR-AA" device=""/>
 <part name="GND11" library="supply1" deviceset="GND" device=""/>
-<part name="R7" library="adafruit" deviceset="R-US_" device="M3216"/>
-<part name="LED2" library="adafruit" deviceset="LED" device="CHIP-LED0603"/>
+<part name="R7" library="adafruit" deviceset="R-US_" device="M3216" value="3.3k"/>
+<part name="SOLARIN" library="adafruit" deviceset="LED" device="CHIP-LED0603"/>
 <part name="GND14" library="supply1" deviceset="GND" device=""/>
-<part name="R8" library="adafruit" deviceset="R-US_" device="M3216"/>
+<part name="R8" library="adafruit" deviceset="R-US_" device="M3216" value="2.2k"/>
 <part name="GND15" library="supply1" deviceset="GND" device=""/>
 <part name="S2" library="switch" deviceset="255SB" device=""/>
 </parts>
@@ -11844,11 +11844,11 @@ Distributor Buerklin, 11G810</description>
 <instance part="GND9" gate="1" x="91.44" y="30.48"/>
 <instance part="IC3" gate="G$1" x="-101.6" y="0"/>
 <instance part="R5" gate="G$1" x="-121.92" y="-5.08" rot="R90"/>
-<instance part="LED1" gate="G$1" x="-121.92" y="-17.78"/>
-<instance part="G1" gate="1" x="-53.34" y="-2.54" rot="R90"/>
+<instance part="CHARGED" gate="G$1" x="-121.92" y="-17.78"/>
+<instance part="LI-ION" gate="1" x="-53.34" y="-2.54" rot="R90"/>
 <instance part="GND11" gate="1" x="-81.28" y="-15.24"/>
 <instance part="R7" gate="G$1" x="-121.92" y="20.32" rot="R90"/>
-<instance part="LED2" gate="G$1" x="-114.3" y="30.48" rot="R90"/>
+<instance part="SOLARIN" gate="G$1" x="-114.3" y="30.48" rot="R90"/>
 <instance part="GND14" gate="1" x="-104.14" y="22.86"/>
 <instance part="R8" gate="G$1" x="-73.66" y="0" rot="R180"/>
 <instance part="GND15" gate="1" x="-63.5" y="-12.7"/>
@@ -11873,7 +11873,7 @@ Distributor Buerklin, 11G810</description>
 <pinref part="IC1" gate="-1" pin="VDD"/>
 </segment>
 </net>
-<net name="GND" class="0">
+<net name="N$19" class="0">
 <segment>
 <pinref part="GND3" gate="1" pin="GND"/>
 <pinref part="C3" gate="G$1" pin="-"/>
@@ -11952,7 +11952,7 @@ Distributor Buerklin, 11G810</description>
 <wire x1="-81.28" y1="-5.08" x2="-81.28" y2="-12.7" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="LED2" gate="G$1" pin="C"/>
+<pinref part="SOLARIN" gate="G$1" pin="C"/>
 <pinref part="GND14" gate="1" pin="GND"/>
 <wire x1="-109.22" y1="30.48" x2="-104.14" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="-104.14" y1="30.48" x2="-104.14" y2="25.4" width="0.1524" layer="91"/>
@@ -11962,7 +11962,7 @@ Distributor Buerklin, 11G810</description>
 <pinref part="GND15" gate="1" pin="GND"/>
 <wire x1="-68.58" y1="0" x2="-63.5" y2="0" width="0.1524" layer="91"/>
 <wire x1="-63.5" y1="0" x2="-63.5" y2="-7.62" width="0.1524" layer="91"/>
-<pinref part="G1" gate="1" pin="-"/>
+<pinref part="LI-ION" gate="1" pin="-"/>
 <wire x1="-63.5" y1="-7.62" x2="-63.5" y2="-10.16" width="0.1524" layer="91"/>
 <wire x1="-53.34" y1="-7.62" x2="-63.5" y2="-7.62" width="0.1524" layer="91"/>
 <junction x="-63.5" y="-7.62"/>
@@ -12160,14 +12160,14 @@ Distributor Buerklin, 11G810</description>
 </net>
 <net name="N$11" class="0">
 <segment>
-<pinref part="LED1" gate="G$1" pin="A"/>
+<pinref part="CHARGED" gate="G$1" pin="A"/>
 <pinref part="R5" gate="G$1" pin="1"/>
 <wire x1="-121.92" y1="-15.24" x2="-121.92" y2="-10.16" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$12" class="0">
 <segment>
-<pinref part="LED1" gate="G$1" pin="C"/>
+<pinref part="CHARGED" gate="G$1" pin="C"/>
 <pinref part="IC3" gate="G$1" pin="STAT"/>
 <wire x1="-121.92" y1="-22.86" x2="-114.3" y2="-22.86" width="0.1524" layer="91"/>
 <wire x1="-114.3" y1="-22.86" x2="-114.3" y2="-5.08" width="0.1524" layer="91"/>
@@ -12177,7 +12177,7 @@ Distributor Buerklin, 11G810</description>
 <segment>
 <pinref part="R7" gate="G$1" pin="2"/>
 <wire x1="-121.92" y1="25.4" x2="-121.92" y2="30.48" width="0.1524" layer="91"/>
-<pinref part="LED2" gate="G$1" pin="A"/>
+<pinref part="SOLARIN" gate="G$1" pin="A"/>
 <wire x1="-121.92" y1="30.48" x2="-116.84" y2="30.48" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -12199,7 +12199,7 @@ Distributor Buerklin, 11G810</description>
 </net>
 <net name="N$17" class="0">
 <segment>
-<pinref part="G1" gate="1" pin="+"/>
+<pinref part="LI-ION" gate="1" pin="+"/>
 <pinref part="S2" gate="1" pin="P"/>
 <wire x1="-53.34" y1="2.54" x2="-53.34" y2="7.62" width="0.1524" layer="91"/>
 </segment>

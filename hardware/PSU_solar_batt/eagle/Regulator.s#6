@@ -10239,11 +10239,11 @@ type 0309, grid 2.5 mm</description>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
 <part name="IC2" library="microchip" deviceset="MCP355*" device="MS" technology="0-60"/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
-<part name="R6" library="adafruit" deviceset="R-US_" device="M0805"/>
-<part name="R1" library="adafruit" deviceset="R-US_" device="M0805"/>
-<part name="R2" library="adafruit" deviceset="R-US_" device="M0805"/>
-<part name="R3" library="adafruit" deviceset="R-US_" device="M0805"/>
-<part name="R4" library="adafruit" deviceset="R-US_" device="M0805"/>
+<part name="R6" library="adafruit" deviceset="R-US_" device="M0805" value="820K"/>
+<part name="R1" library="adafruit" deviceset="R-US_" device="M0805" value="150K"/>
+<part name="R2" library="adafruit" deviceset="R-US_" device="M0805" value="150K"/>
+<part name="R3" library="adafruit" deviceset="R-US_" device="M0805" value="150K"/>
+<part name="R4" library="adafruit" deviceset="R-US_" device="M0805" value="1M"/>
 </parts>
 <sheets>
 <sheet>
@@ -10449,7 +10449,11 @@ type 0309, grid 2.5 mm</description>
 <wire x1="7.62" y1="2.54" x2="5.08" y2="2.54" width="0.1524" layer="91"/>
 <label x="-2.54" y="2.54" size="1.778" layer="95" rot="R180" xref="yes"/>
 <junction x="7.62" y="2.54"/>
-<wire x1="-2.54" y1="2.54" x2="7.62" y2="2.54" width="0.1524" layer="91"/>
+<wire x1="-2.54" y1="2.54" x2="0" y2="2.54" width="0.1524" layer="91"/>
+<pinref part="R4" gate="G$1" pin="2"/>
+<wire x1="0" y1="2.54" x2="7.62" y2="2.54" width="0.1524" layer="91"/>
+<wire x1="0" y1="-7.62" x2="0" y2="2.54" width="0.1524" layer="91"/>
+<junction x="0" y="2.54"/>
 </segment>
 <segment>
 <pinref part="C4" gate="G$1" pin="+"/>
@@ -10486,13 +10490,6 @@ type 0309, grid 2.5 mm</description>
 <junction x="48.26" y="-10.16"/>
 </segment>
 </net>
-<net name="N$5" class="0">
-<segment>
-<pinref part="R4" gate="G$1" pin="1"/>
-<wire x1="5.08" y1="-20.32" x2="0" y2="-20.32" width="0.1524" layer="91"/>
-<wire x1="0" y1="-20.32" x2="0" y2="-17.78" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$3" class="0">
 <segment>
 <pinref part="R1" gate="G$1" pin="2"/>
@@ -10507,10 +10504,17 @@ type 0309, grid 2.5 mm</description>
 <wire x1="48.26" y1="-30.48" x2="48.26" y2="-25.4" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$8" class="0">
+<net name="CONN" class="0">
 <segment>
 <pinref part="IC2" gate="-1" pin="VIN-"/>
 <wire x1="5.08" y1="7.62" x2="7.62" y2="7.62" width="0.1524" layer="91"/>
+<label x="2.54" y="7.62" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="2.54" y1="7.62" x2="7.62" y2="7.62" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="R4" gate="G$1" pin="1"/>
+<label x="0" y="-25.4" size="1.778" layer="95" rot="R270" xref="yes"/>
+<wire x1="0" y1="-25.4" x2="0" y2="-17.78" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

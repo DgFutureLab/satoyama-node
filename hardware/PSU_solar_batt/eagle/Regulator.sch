@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.2.0">
+<eagle version="7.1.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -11922,7 +11922,7 @@ Distributor Buerklin, 11G810</description>
 <part name="REGULATORS" library="switch-dil" deviceset="DIP02YL" device=""/>
 <part name="GND12" library="supply1" deviceset="GND" device=""/>
 <part name="GND13" library="supply1" deviceset="GND" device=""/>
-<part name="IC1" library="microchip" deviceset="MCP355*" device="MS" technology="0-60"/>
+<part name="IC1(MCP1642)" library="microchip" deviceset="MCP355*" device="MS" technology="0-60"/>
 <part name="L2" library="inductor-neosid" deviceset="MS85" device="" value="4.7uH"/>
 <part name="C1" library="rcl" deviceset="CPOL-EU" device="140CLH-1010" value="10uF"/>
 <part name="C4" library="rcl" deviceset="CPOL-EU" device="140CLH-1010" value="10uF"/>
@@ -11931,7 +11931,7 @@ Distributor Buerklin, 11G810</description>
 <part name="GND6" library="supply1" deviceset="GND" device=""/>
 <part name="5VOUT1" library="con-wago-508" deviceset="W237-02P" device=""/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
-<part name="IC2" library="microchip" deviceset="MCP355*" device="MS" technology="0-60"/>
+<part name="IC2(MCP1642)" library="microchip" deviceset="MCP355*" device="MS" technology="0-60"/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="R6" library="adafruit" deviceset="R-US_" device="M0805" value="820K"/>
 <part name="R1" library="adafruit" deviceset="R-US_" device="M0805" value="150K"/>
@@ -11972,7 +11972,7 @@ Distributor Buerklin, 11G810</description>
 <instance part="REGULATORS" gate="1" x="-33.02" y="40.64" rot="R270"/>
 <instance part="GND12" gate="1" x="-129.54" y="-17.78"/>
 <instance part="GND13" gate="1" x="68.58" y="63.5"/>
-<instance part="IC1" gate="-1" x="15.24" y="66.04"/>
+<instance part="IC1(MCP1642)" gate="-1" x="15.24" y="66.04"/>
 <instance part="L2" gate="G$1" x="17.78" y="33.02" rot="R180"/>
 <instance part="C1" gate="G$1" x="-12.7" y="10.16"/>
 <instance part="C4" gate="G$1" x="58.42" y="17.78"/>
@@ -11982,7 +11982,7 @@ Distributor Buerklin, 11G810</description>
 <instance part="5VOUT1" gate="-1" x="81.28" y="15.24" rot="R180"/>
 <instance part="5VOUT1" gate="-2" x="81.28" y="20.32" rot="R180"/>
 <instance part="GND7" gate="1" x="71.12" y="10.16"/>
-<instance part="IC2" gate="-1" x="17.78" y="12.7"/>
+<instance part="IC2(MCP1642)" gate="-1" x="17.78" y="12.7"/>
 <instance part="GND8" gate="1" x="48.26" y="-48.26"/>
 <instance part="R6" gate="G$1" x="48.26" y="15.24" rot="R90"/>
 <instance part="R1" gate="G$1" x="48.26" y="0" rot="R90"/>
@@ -12008,7 +12008,7 @@ Distributor Buerklin, 11G810</description>
 <busses>
 </busses>
 <nets>
-<net name="N$1" class="0">
+<net name="MCP1642" class="0">
 <segment>
 <pinref part="C2" gate="G$1" pin="+"/>
 <wire x1="-15.24" y1="66.04" x2="-15.24" y2="76.2" width="0.1524" layer="91"/>
@@ -12021,7 +12021,7 @@ Distributor Buerklin, 11G810</description>
 <wire x1="-25.4" y1="40.64" x2="-20.32" y2="40.64" width="0.1524" layer="91"/>
 <wire x1="-20.32" y1="40.64" x2="-20.32" y2="76.2" width="0.1524" layer="91"/>
 <junction x="-15.24" y="76.2"/>
-<pinref part="IC1" gate="-1" pin="VDD"/>
+<pinref part="IC1(MCP1642)" gate="-1" pin="VDD"/>
 </segment>
 </net>
 <net name="N$19" class="0">
@@ -12048,13 +12048,13 @@ Distributor Buerklin, 11G810</description>
 <wire x1="-15.24" y1="53.34" x2="-15.24" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="IC1" gate="-1" pin="!CS"/>
+<pinref part="IC1(MCP1642)" gate="-1" pin="!CS"/>
 <wire x1="27.94" y1="68.58" x2="33.02" y2="68.58" width="0.1524" layer="91"/>
 <wire x1="33.02" y1="68.58" x2="33.02" y2="58.42" width="0.1524" layer="91"/>
 <pinref part="GND5" gate="1" pin="GND"/>
 <wire x1="33.02" y1="58.42" x2="35.56" y2="58.42" width="0.1524" layer="91"/>
 <wire x1="35.56" y1="58.42" x2="35.56" y2="48.26" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="-1" pin="SDO/!RDY"/>
+<pinref part="IC1(MCP1642)" gate="-1" pin="SDO/!RDY"/>
 <wire x1="27.94" y1="58.42" x2="33.02" y2="58.42" width="0.1524" layer="91"/>
 <junction x="33.02" y="58.42"/>
 </segment>
@@ -12075,13 +12075,13 @@ Distributor Buerklin, 11G810</description>
 <wire x1="-12.7" y1="0" x2="-12.7" y2="5.08" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="IC2" gate="-1" pin="!CS"/>
+<pinref part="IC2(MCP1642)" gate="-1" pin="!CS"/>
 <wire x1="30.48" y1="15.24" x2="35.56" y2="15.24" width="0.1524" layer="91"/>
 <wire x1="35.56" y1="15.24" x2="35.56" y2="5.08" width="0.1524" layer="91"/>
 <pinref part="GND6" gate="1" pin="GND"/>
 <wire x1="35.56" y1="5.08" x2="38.1" y2="5.08" width="0.1524" layer="91"/>
 <wire x1="38.1" y1="5.08" x2="38.1" y2="-5.08" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="-1" pin="SDO/!RDY"/>
+<pinref part="IC2(MCP1642)" gate="-1" pin="SDO/!RDY"/>
 <wire x1="30.48" y1="5.08" x2="35.56" y2="5.08" width="0.1524" layer="91"/>
 <junction x="35.56" y="5.08"/>
 </segment>
@@ -12139,7 +12139,7 @@ Distributor Buerklin, 11G810</description>
 <wire x1="-12.7" y1="33.02" x2="-12.7" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="-22.86" y1="22.86" x2="-12.7" y2="22.86" width="0.1524" layer="91"/>
 <junction x="-12.7" y="22.86"/>
-<pinref part="IC2" gate="-1" pin="VDD"/>
+<pinref part="IC2(MCP1642)" gate="-1" pin="VDD"/>
 </segment>
 </net>
 <net name="N$13" class="0">
@@ -12157,7 +12157,7 @@ Distributor Buerklin, 11G810</description>
 </net>
 <net name="3.3V" class="0">
 <segment>
-<pinref part="IC1" gate="-1" pin="VSS"/>
+<pinref part="IC1(MCP1642)" gate="-1" pin="VSS"/>
 <wire x1="5.08" y1="55.88" x2="2.54" y2="55.88" width="0.1524" layer="91"/>
 <label x="0" y="55.88" size="1.778" layer="95" rot="R180" xref="yes"/>
 <wire x1="5.08" y1="55.88" x2="0" y2="55.88" width="0.1524" layer="91"/>
@@ -12180,7 +12180,7 @@ Distributor Buerklin, 11G810</description>
 <pinref part="L1" gate="G$1" pin="1"/>
 <wire x1="20.32" y1="86.36" x2="30.48" y2="86.36" width="0.1524" layer="91"/>
 <wire x1="30.48" y1="86.36" x2="30.48" y2="63.5" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="-1" pin="SCK"/>
+<pinref part="IC1(MCP1642)" gate="-1" pin="SCK"/>
 <wire x1="30.48" y1="63.5" x2="27.94" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -12189,13 +12189,13 @@ Distributor Buerklin, 11G810</description>
 <pinref part="L2" gate="G$1" pin="1"/>
 <wire x1="22.86" y1="33.02" x2="33.02" y2="33.02" width="0.1524" layer="91"/>
 <wire x1="33.02" y1="33.02" x2="33.02" y2="10.16" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="-1" pin="SCK"/>
+<pinref part="IC2(MCP1642)" gate="-1" pin="SCK"/>
 <wire x1="33.02" y1="10.16" x2="30.48" y2="10.16" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="5V" class="0">
 <segment>
-<pinref part="IC2" gate="-1" pin="VSS"/>
+<pinref part="IC2(MCP1642)" gate="-1" pin="VSS"/>
 <wire x1="7.62" y1="2.54" x2="5.08" y2="2.54" width="0.1524" layer="91"/>
 <label x="-2.54" y="2.54" size="1.778" layer="95" rot="R180" xref="yes"/>
 <junction x="7.62" y="2.54"/>
@@ -12223,7 +12223,7 @@ Distributor Buerklin, 11G810</description>
 </net>
 <net name="N$10" class="0">
 <segment>
-<pinref part="IC2" gate="-1" pin="VIN+"/>
+<pinref part="IC2(MCP1642)" gate="-1" pin="VIN+"/>
 <wire x1="7.62" y1="12.7" x2="5.08" y2="12.7" width="0.1524" layer="91"/>
 <label x="2.54" y="12.7" size="1.778" layer="95" rot="R180" xref="yes"/>
 <wire x1="2.54" y1="12.7" x2="7.62" y2="12.7" width="0.1524" layer="91"/>
@@ -12256,7 +12256,7 @@ Distributor Buerklin, 11G810</description>
 </net>
 <net name="CONN" class="0">
 <segment>
-<pinref part="IC2" gate="-1" pin="VIN-"/>
+<pinref part="IC2(MCP1642)" gate="-1" pin="VIN-"/>
 <wire x1="5.08" y1="7.62" x2="7.62" y2="7.62" width="0.1524" layer="91"/>
 <label x="2.54" y="7.62" size="1.778" layer="95" rot="R180" xref="yes"/>
 <wire x1="2.54" y1="7.62" x2="7.62" y2="7.62" width="0.1524" layer="91"/>
@@ -12269,7 +12269,7 @@ Distributor Buerklin, 11G810</description>
 </net>
 <net name="EN1" class="0">
 <segment>
-<pinref part="IC1" gate="-1" pin="VREF"/>
+<pinref part="IC1(MCP1642)" gate="-1" pin="VREF"/>
 <wire x1="5.08" y1="71.12" x2="2.54" y2="71.12" width="0.1524" layer="91"/>
 <label x="-2.54" y="71.12" size="1.778" layer="95" rot="R180" xref="yes"/>
 <wire x1="2.54" y1="71.12" x2="0" y2="71.12" width="0.1524" layer="91"/>
@@ -12287,7 +12287,7 @@ Distributor Buerklin, 11G810</description>
 </net>
 <net name="EN2" class="0">
 <segment>
-<pinref part="IC2" gate="-1" pin="VREF"/>
+<pinref part="IC2(MCP1642)" gate="-1" pin="VREF"/>
 <wire x1="7.62" y1="17.78" x2="5.08" y2="17.78" width="0.1524" layer="91"/>
 <label x="0" y="17.78" size="1.778" layer="95" rot="R180" xref="yes"/>
 <wire x1="5.08" y1="17.78" x2="2.54" y2="17.78" width="0.1524" layer="91"/>

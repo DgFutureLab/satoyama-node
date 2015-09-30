@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<grid distance="0.025" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.0125" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -1916,7 +1916,14 @@ design rules under a new name.</description>
 <wire x1="30.4038" y1="29.4894" x2="30.4038" y2="26.5176" width="0.254" layer="1"/>
 <wire x1="30.4038" y1="26.5176" x2="30.48" y2="26.35" width="0.254" layer="1"/>
 <wire x1="30.4038" y1="29.4894" x2="30.48" y2="29.53" width="0.254" layer="1"/>
-<wire x1="30.4038" y1="29.4894" x2="25.725" y2="32.53" width="0" layer="19" extent="1-1"/>
+<wire x1="25.725" y1="32.53" x2="25.725" y2="33.345" width="0.3048" layer="1"/>
+<wire x1="25.725" y1="33.345" x2="26.035" y2="33.655" width="0.3048" layer="1"/>
+<wire x1="26.035" y1="33.655" x2="27.94" y2="33.655" width="0.3048" layer="1"/>
+<wire x1="27.94" y1="33.655" x2="28.575" y2="33.02" width="0.3048" layer="1"/>
+<wire x1="28.575" y1="33.02" x2="28.575" y2="30.1625" width="0.3048" layer="1"/>
+<wire x1="28.575" y1="30.1625" x2="29.21" y2="29.5275" width="0.3048" layer="1"/>
+<wire x1="29.21" y1="29.5275" x2="30.4775" y2="29.5275" width="0.3048" layer="1"/>
+<wire x1="30.4775" y1="29.5275" x2="30.48" y2="29.53" width="0.3048" layer="1"/>
 </signal>
 <signal name="N$3">
 <contactref element="R1" pad="2"/>
@@ -1940,15 +1947,6 @@ design rules under a new name.</description>
 <wire x1="25.146" y1="35.433" x2="25.146" y2="32.6898" width="0.254" layer="1"/>
 <wire x1="25.146" y1="32.6898" x2="25.075" y2="32.53" width="0.254" layer="1"/>
 <wire x1="25.146" y1="35.433" x2="25.08" y2="35.56" width="0.254" layer="1"/>
-</signal>
-<signal name="N$8">
-<wire x1="25.7175" y1="32.385" x2="25.7175" y2="33.3375" width="0.3048" layer="1"/>
-<wire x1="25.7175" y1="33.3375" x2="26.3525" y2="33.9725" width="0.3048" layer="1"/>
-<wire x1="26.3525" y1="33.9725" x2="27.6225" y2="33.9725" width="0.3048" layer="1"/>
-<wire x1="27.6225" y1="33.9725" x2="28.2575" y2="33.3375" width="0.3048" layer="1"/>
-<wire x1="28.2575" y1="33.3375" x2="28.2575" y2="30.1625" width="0.3048" layer="1"/>
-<wire x1="28.2575" y1="30.1625" x2="28.8925" y2="29.5275" width="0.3048" layer="1"/>
-<wire x1="28.8925" y1="29.5275" x2="30.48" y2="29.5275" width="0.3048" layer="1"/>
 </signal>
 <signal name="EN1">
 <contactref element="IC1" pad="1"/>
